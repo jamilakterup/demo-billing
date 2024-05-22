@@ -60,7 +60,7 @@
       <a href="/" class="brand-link">
         <img src="{{asset('logo/rajlogo.png')}}" alt="raj IT Logo" class="brand-image img-circle elevation-3"
           style="opacity: .8">
-        <span class="brand-text font-weight-bold">RAJ IT BMS</span>
+        <span class="brand-text font-weight-bold">NBE MS</span>
       </a>
 
       <!-- Sidebar TODO-->
