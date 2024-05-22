@@ -367,7 +367,7 @@ window.addEventListener('message',function(e){
 </script>
 
 <script>
-    window.addEventListener('invoice-store',function(e){
+    window.addEventListener('estimate-store',function(e){
         if(e.detail.type=='error')
         {
             Swal.fire(

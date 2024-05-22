@@ -93,6 +93,47 @@
                 @endif
             </div>
         </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="vat_text_visibility">Vat & Tax Text visibility</label>
+                <select class="form-control @error('vat_text_visibility') is-invalid @enderror"
+                    wire:model.defer="state.vat_text_visibility" id="vat_text_visibility">
+                    <option value="">-Please select-</option>
+                    <option value="All prices are including VAT & TAX.">All prices are including VAT & TAX.</option>
+                    <option value="All prices are excluding VAT & TAX.">All prices are excluding VAT & TAX.</option>
+                    <option value="VAT & TAX. Paid by">VAT & TAX. Paid by</option>
+                    <option value="None">None</option>
+                </select>
+                @if($errors->has('vat_text_visibility'))
+                <div class="text-danger text-sm"><small>{{ $errors->first('vat_text_visibility') }}</small></div>
+                @endif
+            </div>
+            <div class="form-group col-md-4">
+                <label for="date_visibility">Invoice date visibility</label>
+                <select class="form-control @error('date_visibility') is-invalid @enderror"
+                    wire:model.defer="state.date_visibility" id="date_visibility">
+                    <option value="">-Please select-</option>
+                    <option value="1">Visible</option>
+                    <option value="0">Invisible</option>
+                </select>
+                @if($errors->has('date_visibility'))
+                <div class="text-danger text-sm"><small>{{ $errors->first('date_visibility') }}</small></div>
+                @endif
+            </div>
+            <div class="form-group col-md-4">
+                <label for="auto_seal_signature">Auto seal & signature</label>
+                <select class="form-control @error('auto_seal_signature') is-invalid @enderror"
+                    wire:model.defer="state.auto_seal_signature" id="auto_seal_signature">
+                    <option value="">-Please select-</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+                @if($errors->has('auto_seal_signature'))
+                <div class="text-danger text-sm"><small>{{ $errors->first('auto_seal_signature') }}</small></div>
+                @endif
+            </div>
+        </div>
     </div>
 
 

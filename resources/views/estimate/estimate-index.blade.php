@@ -87,7 +87,7 @@
                                               $grandTotal=$estimate->estimate_details()->sum('total');
                                               $grandTotal=($grandTotal-$estimate->discount)+$estimate->vat+$estimate->tax;
                                           ?>
-                        {{$grandTotal}}
+                        {{$estimate->total}}
                       </td>
                       <td>
                         <a class="btn btn-outline-primary btn-sm" href="{{route('work_order_show',$estimate->id)}}"><i

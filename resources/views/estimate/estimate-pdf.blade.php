@@ -65,9 +65,13 @@
           Ref-{{$estimate->quotation_type->quotation_type_short_name}}{{date('y')}}{{date('m')}}{{$estimate->number}}
         </td>
         <td style="border:none;text-align:right; padding:0">
-          Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          @if($estimate->date_visibility)
+          <span>Date: {{date("d-m-Y", strtotime($estimate->date)) }}</span>
+          @else
+          <span>Date:
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          @endif
         </td>
-        <!-- <td style="border:none;text-align:right; padding:0">Date: {{date("d-m-Y", strtotime($estimate->estimate_date)) }}</td> -->
       </tr>
     </table>
     <br>
@@ -80,13 +84,12 @@
 
     <br>
 
-    <p><b>Subject:</b> <span
-        style="border-bottom:1px solid; padding-bottom:4px">{{$estimate->quotation_type->subject}}</span></p>
+    <p><b>Subject:</b> <span style="border-bottom:1px solid; padding-bottom:4px">{{$estimate->subject}}</span></p>
     <br>
 
     <p style="line-height:2">
       Dear Sir,<br>
-      {{$estimate->quotation_type->description}}
+      {{$estimate->description}}
     </p>
     <br>
     <table id="details">
@@ -118,8 +121,9 @@
       </tbody>
       <tfoot>
         <?php
-            $grandTotal=$estimate->estimate_details->sum('total');
-            $grandTotal=($grandTotal-$estimate->discount)+$estimate->vat+$estimate->tax;
+            $grandTotal=$estimate->total;
+            // $grandTotal=$estimate->estimate_details->sum('total');
+            // $grandTotal=($grandTotal-$estimate->discount)+$estimate->vat+$estimate->tax;
         ?>
 
 
