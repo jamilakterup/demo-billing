@@ -661,6 +661,7 @@ class EstimateCreate extends Component
         $agreementCounter = AgreementCounter::find(1);
         $estimateCounter = EstimateCounter::find(1);
         $invoiceCounter = InvoiceCounter::find(1);
+        $cartContents = \Cart::getContent();
         $quotationType = QuotationType::find($quotation_type_id);
 
 
@@ -689,14 +690,13 @@ class EstimateCreate extends Component
         $estimate->auto_seal_signature = $this->state['auto_seal_signature'];
         $estimate->save();
 
-
-        foreach (\Cart::getContent() as $item) {
+        foreach ($cartContents as $cartContent) {
             $estimateDetail = new EstimateDetail;
             $estimateDetail->estimate_id = $estimate->id;
-            $estimateDetail->product_id = $item->id;
-            $estimateDetail->quantity = $item->quantity;
-            $estimateDetail->price = $item->price;
-            $estimateDetail->total = $item->price * $item->quantity;
+            $estimateDetail->product_id = $cartContent->attributes['product_id'];
+            $estimateDetail->quantity = $cartContent->quantity;
+            $estimateDetail->price = $cartContent->price;
+            $estimateDetail->total = $cartContent->price * $cartContent->quantity;
             $estimateDetail->save();
         }
 
