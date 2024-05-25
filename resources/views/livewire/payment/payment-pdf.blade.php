@@ -66,7 +66,7 @@
             by Cash/ChequeNo__________________________ Bank_________________________
             Branch______________________Dated
             {{ date('d-m-y', strtotime($payment['date'])) }} on account of <span
-                class="bold">{{$payment['invoice']['subject']}}</span>
+                class="bold">{{substr($payment['invoice']['subject'],9)}}</span>
 
         </p>
 
