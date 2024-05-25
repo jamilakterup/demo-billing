@@ -47,9 +47,10 @@
 
         <div>
             <p class="base" style="text-align:left; margin-bottom:-20px">SN:
-                <strong><em>{{$payment['invoice']['number']}}</em></strong>
+                <strong><em>{{ \Carbon\Carbon::parse($payment['invoice']['date'])->format('ym') .
+                        $payment['invoice']['number'] }}</em></strong>
             </p>
-            <p class="base" style="text-align:right; margin-top:-50px">Date: {{ date('d-m-y',
+            <p class="base" style="text-align:right; margin-top:-50px">Date: {{ date('d-m-Y',
                 strtotime($payment['date'])) }}</p>
         </div>
 
