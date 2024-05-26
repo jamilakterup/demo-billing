@@ -595,11 +595,18 @@ class InvoiceTable extends Component
         $withdue = (int)$cartTotal - ((int)$payment + (int)$discount);
 
 
+        $searchTerm = strtolower($this->searchField);
+        $statusValue = null;
 
-
+        if ($searchTerm === 'paid') {
+            $statusValue = 1;
+        } elseif ($searchTerm === 'unpaid') {
+            $statusValue = 0;
+        }
         $invoices = Invoice::with('customer')
             ->where('number', 'like', '%' . $this->searchField . '%')
             ->orWhere('date', 'like', '%' . $this->searchField . '%')
+            ->orWhere('status', $statusValue)
             ->orWhereHas('customer', function ($query) {
                 $query->where('name', 'like', '%' . $this->searchField . '%');
             })

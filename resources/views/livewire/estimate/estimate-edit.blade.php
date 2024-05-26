@@ -569,7 +569,7 @@
 
         <button wire:click.prevent="estimateStore" wire:loading.attr="disabled" class="btn btn-primary">
             <div wire:loading.remove wire:target="estimateStore">
-                <span><i class="fas fa-save mr-1"></i> Submit</span>
+                <span><i class="fas fa-save mr-1"></i>Update</span>
             </div>
 
             <div wire:loading="estimateStore" wire:target="estimateStore">

@@ -80,7 +80,7 @@
                     <img src="{{$employee->signature}}" height="40px">
                 </td>
                 <td rowspan="2" style="text-align:center; border:none; vertical-align:middle">
-                    <img src="/bg/seal.png" height="80px">
+                    <img src="/bg/seal.png" height="90px">
                 </td>
             </tr>
             @endif
