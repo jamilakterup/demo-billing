@@ -39,13 +39,13 @@
                 <legend class="w-auto px-2" style="font-size: 16px">Basic Customer Information</legend>
                 <div class="form-row">
                   <div class="form-group col-md-6">
-                    <label for="inputEmail4">Name</label>
+                    <label for="inputEmail4">Name <span class="text-danger">*</span></label>
                     {{Form::text('name',null,['class'=>'form-control','placeholder'=>'Name','id'=>'inputName4'])}}
                     <div class="text-danger">{{$errors->first('name')}}</div>
                   </div>
 
                   <div class="form-group col-md-6">
-                    <label for="inputDname4">Display Name</label>
+                    <label for="inputDname4">Display Name <span class="text-danger">*</span></label>
                     {{Form::text('display_name',null,['class'=>'form-control','placeholder'=>'Display
                     name','id'=>'inputName4'])}}
                     <div class="text-danger">{{$errors->first('display_name')}}</div>
@@ -54,13 +54,13 @@
 
                 <div class="form-row">
                   <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
+                    <label for="inputEmail4">Email <span class="text-danger">*</span></label>
                     {{Form::text('email',null,['class'=>'form-control','placeholder'=>'Email','id'=>'inputEmail4'])}}
                     <div class="text-danger">{{$errors->first('email')}}</div>
                   </div>
 
                   <div class="form-group col-md-6">
-                    <label for="inputPhone4">Phone</label>
+                    <label for="inputPhone4">Phone <span class="text-danger">*</span></label>
                     {{Form::text('phone',null,['class'=>'form-control','placeholder'=>'Phone','id'=>'inputPhone4'])}}
                     <div class="text-danger">{{$errors->first('phone')}}</div>
                   </div>
@@ -73,7 +73,7 @@
                 <legend class="w-auto px-2" style="font-size: 16px">Customer Company Information</legend>
                 <div class="form-row">
                   <div class="form-group col-md-6">
-                    <label for="inputCname4">Company Name</label>
+                    <label for="inputCname4">Company Name <span class="text-danger">*</span></label>
                     {{Form::text('company_name',null,['class'=>'form-control','placeholder'=>'Company
                     name','id'=>'inputCname4'])}}
                     <div class="text-danger">{{$errors->first('company_name')}}</div>
