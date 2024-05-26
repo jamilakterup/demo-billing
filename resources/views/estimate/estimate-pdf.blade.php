@@ -112,9 +112,11 @@
           <td>{{$estimate_detail->product->name}}</td>
           <td style="text-align:center">{{$estimate_detail->quantity}}</td>
           <td style="text-align:center">{{$estimate_detail->product->unit->name}}</td>
-          <td style="text-align:right">{{number_format((float)$estimate_detail->price, 2, '.', '')}}</td>
+          <td style="text-align:right">{{number_format((float)$estimate_detail->price, 2, '.', ',')}}</td>
           <td style="text-align:right">{{number_format((float)$estimate_detail->price*$estimate_detail->quantity, 2,
-            '.', '')}}</td>
+            '.',
+            ',')}}
+          </td>
         </tr>
         @endforeach
 
@@ -137,20 +139,20 @@
         @if($estimate->vat>0)
         <tr>
           <td colspan="5" style="text-align:center">Vat</td>
-          <td style="text-align:right">{{number_format((float)$estimate->vat, 2, '.', '')}}</td>
+          <td style="text-align:right">{{number_format((float)$estimate->vat, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         @if($estimate->tax>0)
         <tr>
           <td colspan="5" style="text-align:center">Tax</td>
-          <td style="text-align:right">{{number_format((float)$estimate->tax, 2, '.', '')}}</td>
+          <td style="text-align:right">{{number_format((float)$estimate->tax, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         <tr>
           <td colspan="5" style="text-align:center">Total Amount</td>
-          <td style="text-align:right">{{number_format((float)$grandTotal, 2, '.', '')}}</td>
+          <td style="text-align:right">{{number_format((float)$grandTotal, 2, '.', ',')}}</td>
         </tr>
       </tfoot>
     </table>
@@ -161,8 +163,8 @@
   echo '<p style="text-transform: capitalize; font-size:12px"><b>In Words: </b>'.$digit->format($grandTotal).' Taka Only.</p>';
   ?>
 
-    @if(isset($estimate->note))
-    <h4>N.B: {{$estimate->note}}</h4>
+    @if(isset($estimate->vat_text_visibility))
+    <h4>N.B: {{$estimate->vat_text_visibility}}</h4>
     @endif
     <br>
     <p>Thanking you.</p>
