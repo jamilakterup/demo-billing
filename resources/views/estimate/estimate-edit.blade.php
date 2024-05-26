@@ -1,4 +1,17 @@
 @extends('layouts.master')
+
+@section('style')
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+  integrity="sha512-f0tzWhCwVFS3WeYaofoLWkTP62ObhewQ1EZn65oSYDZUg1+CyywGKkWzm8BxaJj5HGKI72PnMH9jYyIFz+GH7g=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.2.2/css/tom-select.bootstrap4.min.css"
+  integrity="sha512-rSpBVO3jAoJ/9Mqqk9gjVGgZX5ZFiwYXap9xWfweRUoLdSgp8NJ6ERvFc0jW+VsaVLQY4QJts1MF9TQxiP8IEA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="{{asset('plugins/printjs/print.min.css')}}" rel="stylesheet" type="text/css">
+@livewireStyles
+@endsection
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -7,306 +20,60 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Edit Quotation</h1>
-        </div><!-- /.col -->
+          <h1 class="m-0">Create Quotation</h1>
+        </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item active">Quotation</li>
           </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
-
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12 col-sm-12 col-md-12">
-
-          {{Form::model($estimate,['route'=>['estimate.update',$estimate->id],'method'=>'PUT', 'files'=>true])}}
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Edit quotation</div>
-              <div class="card-tools">
-                <a class="btn-sm btn-primary" href="{{url()->previous()}}"><i class="fas fa-arrow-circle-left"></i>
-                  Back</a>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="bg-light p-3 border rounded mb-3">
-                <div class="form-row">
-                  <div class="form-group col-md-4">
-                    <label for="inputEmail4">Customer</label>
-                    {{Form::select('customer_id',$customers,null,['class'=>'form-control select2','id'=>''])}}
-                    <div class="text-danger">{{$errors->first('customer_id')}}</div>
-                  </div>
-
-                  <div class="form-group col-md-4">
-                    <label for="inputDname4">Quotation Number</label>
-                    {{Form::text('estimate_number',$counter->number,['class'=>'form-control','placeholder'=>'Estimate
-                    Number','readonly'=>'readonly'])}}
-                    <div class="text-danger">{{$errors->first('estimate_number')}}</div>
-                  </div>
-
-                  <div class="form-group col-md-4">
-                    <label for="inputDname4">Quotation Type</label>
-                    {{Form::select('quotation_type_id',$quotationTypes,null,['class'=>'form-control'])}}
-                    <div class="text-danger">{{$errors->first('quotation_type_id')}}</div>
-                  </div>
-
-
-
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group col-md-4">
-                    <label for="inputEmail4">Quotation Date</label>
-                    {{Form::text('estimate_date',null,['class'=>'form-control date','placeholder'=>'Estimate
-                    Date','id'=>''])}}
-                    <div class="text-danger">{{$errors->first('estimate_date')}}</div>
-                  </div>
-
-                  <div class="form-group col-md-4">
-                    <label for="inputDname4">Expiry Date</label>
-                    {{Form::text('expiry_date',null,['class'=>'form-control date','placeholder'=>'Display
-                    name','id'=>''])}}
-                    <div class="text-danger">{{$errors->first('expiry_date')}}</div>
-                  </div>
-
-                  <div class="form-group col-md-4">
-                    <label for="inputDname4">Reference Number</label>
-                    {{Form::text('reference_number',null,['class'=>'form-control','placeholder'=>'Reference
-                    Number','id'=>''])}}
-                    <div class="text-danger">{{$errors->first('reference_number')}}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-9">
-                  <div class="table-responsive">
-                    <table class="table table-sm table-bordered">
-                      <thead>
-                        <tr>
-                          <th style="width:10%">SL</th>
-                          <th style="width:30%">Product</th>
-                          <th style="width:10%">Unit</th>
-                          <th style="width:10%; text-align:right;">Price</th>
-                          <th style="width:14%; text-align:right;">Qty</th>
-                          <th style="width:20%; text-align:right;">Total</th>
-                          <th style="width:6%">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody id="selected-product-container">
-                        @if(\Cart::getContent()->count()>0)
-
-
-
-                        @foreach (\Cart::getContent() as $cart)
-                        <tr class="row_{{$cart->id}}">
-                          <td>{{$loop->iteration}}</td>
-                          <td>{{$cart->name}}</td>
-                          <td>{{$cart->attributes['unit_name']}}</td>
-                          <td style="text-align:right">{{$cart->price}}</td>
-                          <td style="text-align:right">{{$cart->quantity}}</td>
-                          <td style="text-align:right">{{$cart->quantity*$cart->price}}</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-danger cart-delete" cartid="{{$cart->id}}"><i
-                                class="fa fa-trash-alt"></i></a>
-                          </td>
-                        </tr>
-                        @endforeach
-                        @endif
-                      </tbody>
-                    </table>
-
-                    <table class="table table-borderless border-top">
-                      <tbody>
-                        <tr>
-                          <td style="width: 68%" align="right"><b>Total</b></td>
-                          <td>
-                            {{Form::text('sub_total',\Cart::getTotal(),['class'=>'form-control','id'=>'total','readonly'=>true])}}
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td style="width: 68%" align="right"><b>Discount</b></td>
-                          <td>
-                            {{Form::text('discount',$estimate->discount,['class'=>'form-control
-                            key_up','id'=>'discount'])}}
-                          </td>
-
-                          <td>
-                            <div class="form-group clearfix">
-                              <div class="icheck-primary d-inline">
-                                <input type="checkbox" name="discount_percent" id="checkboxPrimary1"
-                                  class="discountPercent check">
-                                <label for="checkboxPrimary1">
-                                  %
-                                </label>
-                              </div>
-                            </div>
-                          </td>
-
-                        </tr>
-
-
-                        <tr>
-                          <td style="width: 68%" align="right"><b>Vat</b></td>
-                          <td>
-                            {{Form::text('vat',$estimate->vat,['class'=>'form-control key_up','id'=>'vat'])}}
-                          </td>
-                          <td>
-                            <div class="form-group clearfix">
-                              <div class="icheck-primary d-inline">
-                                <input type="checkbox" name="vat_percent" id="checkboxPrimary3"
-                                  class="vat-percent check">
-                                <label for="checkboxPrimary3">
-                                  %
-                                </label>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-
-
-                        <tr>
-                          <td style="width: 68%" align="right"><b>Tax</b></td>
-                          <td>
-                            {{Form::text('tax',$estimate->tax,['class'=>'form-control key_up','id'=>'tax'])}}
-                          </td>
-                          <td>
-                            <div class="form-group clearfix">
-                              <div class="icheck-primary d-inline">
-                                <input type="checkbox" name="tax_percent" id="checkboxPrimary2"
-                                  class="tax-percent check">
-                                <label for="checkboxPrimary2">
-                                  %
-                                </label>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-
-                        <tr class="border-top">
-                          <td align="right"><b>Grand Total</b></td>
-                          <td>
-                            {{Form::text('grand_total',$estimate->total,['class'=>'form-control','id'=>'grandTotal','readonly'=>true])}}
-                          </td>
-                          <td>
-
-                          </td>
-                        </tr>
-
-                      </tbody>
-                    </table>
-
-                    <div>
-                      <div class="form-group">
-                        <label for="inputEmail4">Note</label>
-                        {{Form::textarea('note',null,['class'=>'form-control','rows'=>'2'])}}
-                        <div class="text-danger">{{$errors->first('note')}}</div>
-                      </div>
-                    </div>
-
-
-                    <table class="table table-borderless">
-                      <tbody>
-                        <tr>
-                          <td>
-                            <label for="work_order" class="form-label">Work Order <span
-                                class="text-sm">(Optional)</span></label>
-
-                            {{Form::file('work_order',['class'=>'form-control'])}}
-
-                            <div class="text-danger">{{$errors->first('work_order')}}
-                            </div>
-                          </td>
-                          <td>
-                            <label for="work_completion" class="form-label">Work
-                              Completion
-                              Certificate <span class="text-sm">(Optional)</span></label>
-
-                            {{Form::file('work_completion',['class'=>'form-control'])}}
-
-                            <div class="text-danger">{{$errors->first('work_completion')}}
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-
-                </div>
-
-                <div class="col-md-3">
-                  <div class="bg-light p-3 border rounded">
-                    <div class="form-group">
-                      <label for="inputEmail4">Product</label>
-                      {{Form::select('product',$products,null,['class'=>'form-control product-change
-                      select2','id'=>'product'])}}
-                      <div class="text-danger show-error">{{$errors->first('product')}}</div>
-                    </div>
-
-
-
-                    <div class="form-group">
-                      <label for="inputDname4">Price</label>
-                      <div style="position: relative">
-                        <div class="loading-container"
-                          style="position: absolute; top:50%; left:10px; transform: translateY(-50%); display:none">
-                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                          Loading...
-                        </div>
-                        {{Form::text('price',null,['class'=>'form-control','placeholder'=>'Enter
-                        price','id'=>'price'])}}
-                        <div class="text-danger show-error">{{$errors->first('price')}}</div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <input type="checkbox" id="vat_tax">
-                      <label for="vat_tax">Include Vat and Tax?</label>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputDname4">Quantity</label>
-                      {{Form::text('quantity',null,['class'=>'form-control','placeholder'=>'Enter
-                      quantity','id'=>'quantity'])}}
-                      <div class="text-danger show-error">{{$errors->first('quantity')}}</div>
-                    </div>
-
-                    <div class="d-flex justify-content-center">
-                      <button class="btn btn-secondary border" type="button" id="add-product-btn"><span
-                          class="btn-icon"><i class="fa fa-plus mr-2"></i></span>ADD PRODUCT</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class="card-footer">
-              <div class="d-flex justify-content-center">
-                {{Form::submit('Update',['class'=>'btn btn-primary text-uppercase font-weight-bold'])}}
-              </div>
-            </div>
-          </div>
-          {{Form::close()}}
         </div>
       </div>
-    </div><!-- /.container-fluid -->
-  </section>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  @livewire('estimate.estimate-edit', ['estimate_id' => $estimate->id])
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+@endsection
+
+
+
+@section('js')
+@livewireScripts
+<x-livewiremodal-base />
+<!-- Daterange picker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+  integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.2.2/js/tom-select.complete.js"
+  integrity="sha512-KfTOBVJv8qnV1b+2tsbTLepS7+RAgmVV0Odk6cj1eHxbR8WFX99gwIWOutwFAUlsve3FaGG3VxoPWWLRnehX1w=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<script src="{{asset('plugins/printjs/print.min.js')}}"></script>
 
 
 
 
 @push('scripts')
+
+
+<script>
+  $(document).on('change','#type',function(e){
+        var invoiceType=$(this).val();
+        if(invoiceType==1){
+            $('#interval-container').css('display','block');
+        }
+        else{
+            $('#interval-container').css('display','none');
+        }
+    });
+</script>
+
 
 <script>
   $(function () {
@@ -389,7 +156,9 @@
 
 
           $(document).on('click','#add-product-btn',function(){
+              
               var vatTax=$('#vat_tax').is(':checked');
+              
               var product=$('#product').val();
               var price=$('#price').val();
               var quantity=$('#quantity').val();
@@ -452,7 +221,6 @@
 
 
           function cartdelete(id){
-
             $.ajax({
                     type: "GET",
                     url:"/cart/item/delete/"+id,
@@ -463,8 +231,7 @@
                             $('.row_'+response.delid).remove();
                         }
                     }
-
-            });
+                    });
 
           }
 
@@ -485,7 +252,6 @@
 
                 //$('#destroy_form_'+delid).submit();
                 //window.location.href=route;
-                
                 cartdelete(cart_id);
                 global_change();
                 // Swal.fire(
@@ -507,45 +273,441 @@
           $(document).on('keyup','.key_up',function(){
             global_change();
           });
+        });
+</script>
+
+
+<script>
+  window.addEventListener('is_delete_confirm',function(event){
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+        if(result.isConfirmed) {
+            Livewire.emit('removalId');
+        }
+    });
+});
+
+
+// delete alert
+window.addEventListener('delete_confirm',function(e){
+    Swal.fire({
+        toast: true,
+        icon: 'success',
+        title: e.detail.title,
+        animation: false,
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+});
+
+// delete toast
+window.addEventListener('notification',function(e){
+        Swal.fire({
+            toast: true,
+            icon: e.detail.type,
+            title: e.detail.msg,
+            animation: true,
+            position: 'top-right',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+});
+
+
+// upload toast
+window.addEventListener('message',function(e){
+        if(e.detail.type=='error')
+        {
+            Swal.fire(
+            'Opps',
+            e.detail.title,
+            e.detail.type
+            );
+        }
+        else
+        {
+            $('#x-modal').modal('hide');
+            Swal.fire({
+                toast: true,
+                icon: e.detail.type,
+                title: e.detail.title,
+                animation: false,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+        }
+
+    });
+    
+
+</script>
+
+<script>
+  window.addEventListener('invoice-store',function(e){
+        if(e.detail.type=='error')
+        {
+            Swal.fire(
+            'Opps',
+            e.detail.title,
+            e.detail.type
+            );
+        }
+        else
+        {
+            $('#x-modal').modal('hide');
+            Swal.fire({
+                toast: true,
+                icon: e.detail.type,
+                title: e.detail.title,
+                animation: false,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+        }
+
+    });
+    window.addEventListener('is_delete_confirm',function(event){
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+        if(result.value) {
+            Livewire.emitTo('invoice.invoice-table','deleteConfirmed');
+        }
+
+        });
+    });
+
+    window.addEventListener('notification',function(e){
+        Swal.fire({
+            toast: true,
+            icon: e.detail.type,
+            title: e.detail.msg,
+            animation: true,
+            position: 'top-right',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+    });
+
+
+    window.addEventListener('invoice-preview',function(e){
+        var invoiceName=e.detail.invoiceName;
+        var path='{{asset('/pdf/')}}'+'/'+invoiceName;
+
+        Swal.fire({
+        title: '<strong>Preview</strong>',
+        width:'800px',
+        html:
+            '<iframe src="'+path+'" width="100%" height="500px"></iframe>',
+        showCloseButton: true,
+        showCancelButton: true,
+        })
+    });
+
+    window.addEventListener('print',function(e){
+        const timestamp = new Date().getTime();
+        var invoiceName=e.detail.file;
+        var path='{{asset('/pdf/')}}'+'/'+invoiceName+'?t='+timestamp;
+
+        printJS({
+            printable: path,
+            showModal:true,
+            modalMessage:'Retrieving Document...',
+            type: 'pdf',
+        })
+    });
+
+    
+
+    $(document).on("click",".del",function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.value) {
+                    var delid=$(this).attr("data");
+
+                    var type=$(this).attr("type");
+                    if(type=="new"){
+                        Livewire.emitTo('estimate.estimate-create','cartDelete',delid);
+                    }
+                }
+        });
+    });
+
+    $(document).on("click","#allClear",function(){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.value) {
+                    Livewire.emitTo('purchase.rawmaterial-purchase-new','deleteAll');
+                }
+
+        });
+    });
+
+
+    window.addEventListener('show-modal',function(e){
+        $('#invoice-create-modal').modal('show');
+
+        $(".select2").select2({
+            theme: 'bootstrap4',
+            dropdownParent: $("#invoice-create-modal"),
+        });
+    });
+
+    window.addEventListener('select-reload',function(event){
+        $(".select2").select2({
+            theme: 'bootstrap4',
+            dropdownParent: $(".modal"),
+        });
+    });
+
+    
+    $(document).on('change','#type',function(e){
+        var invoiceType=$(this).val();
+        if(invoiceType==1){
+            $('#interval-container').css('display','block');
+        }
+        else{
+            $('#interval-container').css('display','none');
+        }
+    });
+
+
+    // vat tax counter::
+    $(document).ready(function(){
+
+        $(document).on('keyup','.key_up',function(e){
+            calculateTotal();
+        });
+
+        $(document).on('keyup','.payment',function(e){
+            calculateTotal();
+        });
+
+        $(document).on('click','.check',function(){
+            calculateTotal();
+        });
+
+        function calculateTotal() {
+            let discount_percent = $('.discount_percent').prop("checked");
+            let vat_percent = $('.vat_percent').prop("checked");
+            let tax_percent = $('.tax_percent').prop("checked");
+            let vatTax_parcentage= $('.vatTax_parcentage').prop('checked');
+
+            let discount = parseFloat($('.discount').val()) || 0;
+            let vat = parseFloat($('.vat').val()) || 0;
+            let tax = parseFloat($('.tax').val()) || 0;
+            let vatTaxVal= $('.vatTaxVal').val() || 0;
+
+            let payment = parseFloat($('.payment').val()) || 0;
+            let total= parseFloat($('.total').val()) || 0;
+
+
+            // Calculate discount based on checkbox state
+            if (discount_percent==true) {
+                discount = (total * discount) / 100;
+            }else{
+                discount = parseFloat($('.discount').val()) || 0;
+            }
+
+            // Calculate totalWith using the formula
+            if(vat_percent==true || tax_percent==true){
+                var totalWith = (total * 100) / (100 - (vat + tax));
+            }else{
+                var totalWith=total+tax+vat;
+            }
+
+            // console.log(totalWith,vat_percent,tax_percent,discount_percent,discount)
+            let due = totalWith - (discount + payment);
+            $('.due').val(due);
+        }
+
+    });
 
 
 
 
+    document.addEventListener("livewire:load", function (event) {
+        window.livewire.hook('message.processed', () => {
+            
+            $(document).ready(function() {
+                $('.tom-select').each(function() {
+                    new TomSelect(this);
+                });                
+            });
+            
+            
+            jQuery('.date').datetimepicker({
+                format:'Y-m-d',
+                timepicker:false,
+                formatDate:'Y-m-d',
+            });
+
+        })
+    });
+
+</script>
 
 
+<script>
+  $(function () {
+      $("#example1").DataTable({
+        "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+  });
+
+  $(function () {
+      $("#example2").DataTable({
+        "lengthChange": false, "autoWidth": false,
+        "columnDefs":[{"orderable": false, "targets": [2] }],
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+  });
 
 
+    $(document).ready(function(){
 
 
+            $(document).on('click','.delete',function(e){
+            e.preventDefault();
+            let delid = $(this).attr('delid');
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if(result.isConfirmed) {
 
+                // Swal.fire(
+                // 'Deleted!',
+                // 'Your file has been deleted.',
+                // 'success'
+                // );
+                $('#destroy_form_'+delid).submit();
+                //window.location.href=route;
+            }
+
+            });
+
+          });
+
+        $(".select2").select2({
+            theme: 'bootstrap4',
+        });
+
+        $('.date').daterangepicker({
+            singleDatePicker: true,
+            format: 'YYYY-MM-DD',
+            minYear: 2011,
+            showDropdowns: true,
+            locale: {
+                format: 'YYYY-MM-DD',
+            },
+            calender_style: "picker_3"
         });
 
 
-        // function cartUpdate(id,value){
-        // $.ajax({
-        //     type: "GET",
-        //     url:"/cart/update/",
-        //     dataType: "json",
-        //     data: {
-        //         id: id,
-        //         value:value
-        //     },
-        //     beforeSend: function() {
-        //         //$("#loading-image").show();
-        //         $('.cart-update-btn-spin-'+id).html('<span class="fas fa-spinner fa-pulse"></span>');
-        //     },
-        //     success: function(response) {
-        //         $(".total-price").text(response.totalPrice);
-        //         $('.update-qty-'+id).text(response.totalQty);
-        //         $('.cart-update-btn-spin-'+id).html('<span class="fas fa-circle-notch"></span>');
-        //         $(".chcekout-product-list").html(response.check_out_list);
+    });
 
-        //         //$(".total-item").text(response.totalQty);
-        //     }
-        //   });
-        //}
+
+function load_tomselect() {
+    document.querySelectorAll(".tom-select").forEach(el => {
+        if (el && el instanceof Element && el.tagName === "SELECT") {
+            el.style.display = "";
+            if (!el.hasAttribute("data-tomselect-initialized")) {
+                let settings = { sortField: false };
+                if (el.multiple) {
+                    settings.plugins = ["remove_button", "clear_button"];
+                } else {
+                    settings.plugins = ["clear_button"];
+                }
+                if (el._tomselect) {
+                    let selectedValue = el._tomselect.getValue();
+                    el._tomselect.destroy();
+                    el._tomselect = null;
+                    el.value = selectedValue;
+                }
+                el._tomselect = new TomSelect(el, settings);
+                el.setAttribute("data-tomselect-initialized", "true");
+            }
+        }
+    });
+}
+
+load_tomselect();
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof Livewire !== 'undefined') {
+        Livewire.hook('message.processed', (message, component) => {
+           load_tomselect();
+        });
+    }
+});
+
+
 </script>
 @endpush
-
-
 @endsection
