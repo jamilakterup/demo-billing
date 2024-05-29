@@ -100,7 +100,6 @@ class InvoiceController extends Controller
             'format'            => 'A4',
             'orientation'       => 'P',
             'default_font_size' => '12',
-            'default_font' => 'nikosh',
             'margin_top'        => 54,
             'margin_right'      => 12,
             'margin_bottom'     => 25,

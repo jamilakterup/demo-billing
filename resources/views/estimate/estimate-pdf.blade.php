@@ -85,12 +85,12 @@
     <br>
 
     <p><b>Subject:</b> <span
-        style="border-bottom:1px solid; padding-bottom:4px; font-family:nikosh">{{$estimate->subject}}</span></p>
+        style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{$estimate->subject}}</span></p>
     <br>
 
     <p style="line-height:2">
       Dear Sir,<br>
-      <span style="font-family:nikosh">{{$estimate->description}}</span>
+      <span style="font-family:siliguri;">{{$estimate->description}} </span>
     </p>
     <br>
     <table id="details">
