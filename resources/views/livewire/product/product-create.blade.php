@@ -19,12 +19,12 @@
             <div class="invalid-feedback">{{$message}}</div>
             @enderror
           </div>
-          
+
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="inputEmail4">Unit</label>
-    
+                <label for="inputEmail4">Product Unit</label>
+
                 <select wire:model.defer="state.unit_id" name="unit_id"
                   class="form-control @error('unit_id') is-invalid @enderror">
                   <option value="">--Please Select--</option>
@@ -41,7 +41,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="inputEmail4">Product Type</label>
-    
+
                 <select wire:model.defer="state.product_type_id" name="product_type_id"
                   class="form-control @error('product_type_id') is-invalid @enderror">
                   <option value="">--Please Select--</option>
@@ -61,8 +61,8 @@
               <div class="form-group">
                 <label for="product_image">Product Image</label>
                 <input type="file" name="image" wire:model.defer="state.image"
-                  class="form-control @error('image') is-invalid @enderror" id="product_image" aria-describedby="emailHelp"
-                  placeholder="Enter image">
+                  class="form-control @error('image') is-invalid @enderror" id="product_image"
+                  aria-describedby="emailHelp" placeholder="Enter image">
                 @error('image')
                 <div class="invalid-feedback">{{$message}}</div>
                 @enderror
@@ -71,19 +71,22 @@
 
             <div class="col-md-6">
               <div class="form-group">
-                <label for="inputEmail4">Price</label>
-                <input type="text" wire:model.defer="state.price" class="form-control @error('price') is-invalid @enderror"
-                  id="" aria-describedby="emailHelp" placeholder="Enter name">
+                <label for="inputEmail4">Product Price</label>
+                <input type="text" wire:model.defer="state.price"
+                  class="form-control @error('price') is-invalid @enderror" id="" aria-describedby="emailHelp"
+                  placeholder="Enter price">
                 @error('price')
                 <div class="invalid-feedback">{{$message}}</div>
                 @enderror
               </div>
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="product_description">Product Description</label>
-            <textarea name="description" wire:model.defer="state.description" id="product_description" cols="30" rows="3" class="form-control @error('description') is-invalid @enderror" id="product_description"></textarea>
+            <textarea name="description" wire:model.defer="state.description" id="product_description" cols="30"
+              rows="3" class="form-control @error('description') is-invalid @enderror"
+              id="product_description"></textarea>
             @error('description')
             <div class="invalid-feedback">{{$message}}</div>
             @enderror

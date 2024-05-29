@@ -85,7 +85,7 @@ class Product extends Component
             $extension = $file->getClientOriginalExtension();
             $fileName = 'product/' . 'product_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['image'] = $file->storeAs($fileName);
+            $validatedData['image'] = $fileName;
         }
 
 
@@ -128,9 +128,8 @@ class Product extends Component
             $extension = $file->getClientOriginalExtension();
             $fileName = 'product/' . 'product_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['image'] = $file->storeAs($fileName);
+            $validatedData['image'] = $fileName;
         }
-
         AppProduct::create($validatedData);
 
         $this->dispatchBrowserEvent('product-store', [

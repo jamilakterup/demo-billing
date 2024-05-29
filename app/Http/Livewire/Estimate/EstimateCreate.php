@@ -537,7 +537,6 @@ class EstimateCreate extends Component
         $cartContents = \Cart::getContent();
         $quotationType = QuotationType::find($quotation_type_id);
 
-
         $estimate = new Estimate;
         $estimate->customer_id = $customer_id;
         $estimate->user_id = Auth::user()->id;

@@ -95,6 +95,7 @@
         <tr>
           <th>Sl No.</th>
           <th>Item Description</th>
+          <th>Image</th>
           <th>Qty</th>
           <th>Unit</th>
           <th style="text-align:right">Unit Price</th>
@@ -110,6 +111,11 @@
         <tr>
           <td>{{$loop->iteration}}</td>
           <td>{{$invoice_detail->name}}</td>
+          <td style="text-align:center">
+            @if($invoice_detail->product->image)
+            <img height="60px" width="100px" src="{{ asset('storage/' . $invoice_detail->product->image) }}" alt="">
+            @endif
+          </td>
           <td>{{$invoice_detail->quantity}}</td>
           <td>{{$invoice_detail->attributes['unit_name']}}</td>
           <td style="text-align:right">{{number_format((float)$invoice_detail->price, 2, '.', ',')}}</td>
@@ -130,19 +136,19 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="5" style="text-align:center">Total</td>
+          <td colspan="6" style="text-align:center">Total</td>
           <td style="text-align:right">{{number_format((float)$total, 2, '.', ',')}}</td>
         </tr>
         @if($cartDiscount>0)
         <tr>
-          <td colspan="5" style="text-align:center">Discount</td>
+          <td colspan="6" style="text-align:center">Discount</td>
           <td style="text-align:right">{{number_format((float)$cartDiscount, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         @if($cartVat>0)
         <tr>
-          <td colspan="5" style="text-align:center">VAT ({{number_format((float)($cartVat*100)/$total, 2, '.', '')}} %)
+          <td colspan="6" style="text-align:center">VAT ({{number_format((float)($cartVat*100)/$total, 2, '.', '')}} %)
           </td>
           <td style="text-align:right">{{number_format((float)$cartVat, 2, '.', ',')}}</td>
         </tr>
@@ -150,14 +156,14 @@
 
         @if($cartTax>0)
         <tr>
-          <td colspan="5" style="text-align:center">IT ({{number_format((float)($cartTax*100)/$total, 2, '.', '')}} %)
+          <td colspan="6" style="text-align:center">IT ({{number_format((float)($cartTax*100)/$total, 2, '.', '')}} %)
           </td>
           <td style="text-align:right">{{number_format((float)$cartTax, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         <tr>
-          <td colspan="5" style="text-align:center">Grand Total</td>
+          <td colspan="6" style="text-align:center">Grand Total</td>
           <td style="text-align:right">{{number_format((float)($total+$cartVat+$cartTax)-$cartDiscount, 2, '.', ',')}}
           </td>
         </tr>

@@ -94,13 +94,14 @@
     <br>
     <table id="details">
       <thead>
-        <tr>
+        <tr style="text-align:right">
           <th>Sl No.</th>
           <th>Item</th>
+          <th>Image</th>
           <th>Qty</th>
           <th>Unit</th>
-          <th style="text-align:right">Unit Price</th>
-          <th style="text-align:right">Amount</th>
+          <th>Unit Price</th>
+          <th>Amount</th>
         </tr>
       </thead>
       <tbody>
@@ -110,6 +111,11 @@
         <tr>
           <td style="text-align:center">{{$loop->iteration}}</td>
           <td>{{$estimate_detail->product->name}}</td>
+          <td style="text-align:center">
+            @if($estimate_detail->product->image)
+            <img height="60px" width="100px" src="{{ asset('storage/' . $estimate_detail->product->image) }}" alt="">
+            @endif
+          </td>
           <td style="text-align:center">{{$estimate_detail->quantity}}</td>
           <td style="text-align:center">{{$estimate_detail->product->unit->name}}</td>
           <td style="text-align:right">{{number_format((float)$estimate_detail->price, 2, '.', ',')}}</td>
@@ -131,27 +137,27 @@
 
         @if($estimate->discount>0)
         <tr>
-          <td colspan="5" style="text-align:center">Discount</td>
+          <td colspan="6" style="text-align:center">Discount</td>
           <td style="text-align:right">{{number_format((float)$estimate->discount, 2, '.', '')}}</td>
         </tr>
         @endif
 
         @if($estimate->vat>0)
         <tr>
-          <td colspan="5" style="text-align:center">Vat</td>
+          <td colspan="6" style="text-align:center">Vat</td>
           <td style="text-align:right">{{number_format((float)$estimate->vat, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         @if($estimate->tax>0)
         <tr>
-          <td colspan="5" style="text-align:center">Tax</td>
+          <td colspan="6" style="text-align:center">Tax</td>
           <td style="text-align:right">{{number_format((float)$estimate->tax, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         <tr>
-          <td colspan="5" style="text-align:center">Total Amount</td>
+          <td colspan="6" style="text-align:center">Total Amount</td>
           <td style="text-align:right">{{number_format((float)$grandTotal, 2, '.', ',')}}</td>
         </tr>
       </tfoot>
