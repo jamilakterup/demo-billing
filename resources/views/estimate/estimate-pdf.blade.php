@@ -90,7 +90,7 @@
 
     <p style="line-height:2">
       Dear Sir,<br>
-      <span style="font-size:15px; font-family:nikosh">{{$estimate->description}}</span>
+      <span style="font-family:nikosh">{{$estimate->description}}</span>
     </p>
     <br>
     <table id="details">

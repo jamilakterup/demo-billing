@@ -82,12 +82,13 @@
 
 
     <br>
-    <p><b>Subject:</b> <span style="border-bottom:1px solid; padding-bottom:4px">{{$invoice['subject']}}</span></p>
+    <p><strong>Subject:</strong> <span
+        style="border-bottom:1px solid; padding-bottom:4px; font-family:nikosh">{{$invoice['subject']}}</span></p>
 
     <br>
     <p>
       Dear Sir,<br>
-      {{$invoice['description']}}
+      <span style="font-family:nikosh">{{$invoice['description']}}</span>
     </p>
     <br>
     <table id="details">
