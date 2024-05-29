@@ -152,7 +152,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($carts as $cart)
+                                    @foreach (\Cart::getContent()->sortBy('id') as $cart)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$cart->name}}</td>
