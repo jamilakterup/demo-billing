@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>rajIT Billing Management System</title>
+  <title>North Bengal Billing Management System</title>
   <link rel="icon" href="{{asset('/logo/nbelogo.png')}}" type="image/png" sizes="16x16">
   <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 
