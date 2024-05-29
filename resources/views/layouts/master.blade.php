@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>rajIT Billing Management System</title>
-  <link rel="icon" href="{{asset('/logo/rajlogo.png')}}" type="image/png" sizes="16x16">
+  <link rel="icon" href="{{asset('/logo/nbelogo.png')}}" type="image/png" sizes="16x16">
   <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 
   <!-- Google Font: Source Sans Pro -->
@@ -48,7 +48,7 @@
 
     <!-- Preloader -->
     {{-- <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="{{asset('logo/rajlogo.png')}}" alt="rajIT Solution Ltd." height="60"
+      <img class="animation__shake" src="{{asset('logo/nbelogo.png')}}" alt="rajIT Solution Ltd." height="60"
         width="60">
     </div> --}}
 
@@ -58,8 +58,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="/" class="brand-link">
-        <img src="{{asset('logo/rajlogo.png')}}" alt="raj IT Logo" class="brand-image img-circle elevation-3"
-          style="opacity: .8">
+        <img src="{{asset('logo/nbelogo.png')}}" alt="raj IT Logo" class="brand-image elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-bold">NBE MS</span>
       </a>
 
