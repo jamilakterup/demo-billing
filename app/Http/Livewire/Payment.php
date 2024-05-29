@@ -205,21 +205,21 @@ class Payment extends Component
             $extension = $file->getClientOriginalExtension();
             $fileName = 'payment/' . 'payment_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['certificate_file'] = $file->storeAs($fileName);
+            $validatedData['certificate_file'] = $fileName;
         }
         if (isset($this->state['vat_file'])) {
             $file = $this->state['vat_file'];
             $extension = $file->getClientOriginalExtension();
             $fileName = 'payment/' . 'payment_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['vat_file'] = $file->storeAs($fileName);
+            $validatedData['vat_file'] = $fileName;
         }
         if (isset($this->state['tax_file'])) {
             $file = $this->state['tax_file'];
             $extension = $file->getClientOriginalExtension();
             $fileName = 'payment/' . 'payment_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['tax_file'] = $file->storeAs($fileName);
+            $validatedData['tax_file'] = $fileName;
         }
 
         $invoice = Invoice::findOrFail($this->state['invoice_id']);
@@ -327,21 +327,21 @@ class Payment extends Component
             $extension = $file->getClientOriginalExtension();
             $fileName = 'payment/' . 'payment_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['certificate_file'] = $file->storeAs($fileName);
+            $validatedData['certificate_file'] = $fileName;
         }
         if (isset($this->state['vat_file'])) {
             $file = $this->state['vat_file'];
             $extension = $file->getClientOriginalExtension();
             $fileName = 'payment/' . 'payment_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['vat_file'] = $file->storeAs($fileName);
+            $validatedData['vat_file'] = $fileName;
         }
         if (isset($this->state['tax_file'])) {
             $file = $this->state['tax_file'];
             $extension = $file->getClientOriginalExtension();
             $fileName = 'payment/' . 'payment_' . uniqid() . '.' . $extension; //set to db and local
             $file->storeAs('public', $fileName);
-            $validatedData['tax_file'] = $file->storeAs($fileName);
+            $validatedData['tax_file'] = $fileName;
         }
 
         $invoice = Invoice::findOrFail($this->state['invoice_id']);
