@@ -111,7 +111,7 @@
         @foreach($estimate_details as $estimate_detail)
         <tr>
           <td style="text-align:center">{{$loop->iteration}}</td>
-          <td style="font-family:nikosh">{{$estimate_detail->product->name}}</td>
+          <td style="font-family:siliguri">{{$estimate_detail->product->name}}</td>
           <td style=" text-align:center">
             @if($estimate_detail->product->image)
             <img height="60px" width="100px" src="{{ asset('storage/' . $estimate_detail->product->image) }}" alt="">
