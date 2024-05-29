@@ -631,6 +631,43 @@ class EstimateEdit extends Component
 
     public function resetAll()
     {
-        $this->due = $this->estimate->total;
+        $cartTotal = Cart::getTotal();
+        // dd($cartTotal);
+        if ($this->discount == '') {
+            $this->discount = 0;
+        }
+        if ($this->vat == '') {
+            $this->vat = 0;
+        }
+        if ($this->tax == '') {
+            $this->tax = 0;
+        }
+
+
+
+        if (!is_numeric($this->discount)) {
+            $this->discount = 0;
+        }
+        if (!is_numeric($this->vat)) {
+            $this->vat = 0;
+        }
+        if (!is_numeric($this->tax)) {
+            $this->tax = 0;
+        }
+
+
+
+
+
+        if ($this->discount_percent) {
+            $cartDiscount = ($cartTotal * $this->discount) / 100;
+        } else {
+            $cartDiscount = $this->discount;
+        }
+
+
+
+        $total_payable = ($cartTotal * 100) / (100 - (floatval($this->vat) + floatval($this->tax))) - $cartDiscount;
+        $this->due = $total_payable - $cartDiscount;
     }
 }
