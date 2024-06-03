@@ -37,7 +37,7 @@
 <body>
     <section>
         <div class="text-center">
-            <img style="width:100px;" src="{{asset('logo/nbelogo.png')}}" alt="">
+            <img style="width:70px;" src="{{asset('logo/nbelogo.png')}}" alt="">
             <p class="text-center base" style="margin-bottom:-10px">H#122, Gonokpara, Ghoramara, Boalia,
                 Rajshahi-6100 Bangladesh,Phone
                 : +8801762623193,
