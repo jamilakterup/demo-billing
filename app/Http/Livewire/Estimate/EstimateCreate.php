@@ -53,6 +53,7 @@ class EstimateCreate extends Component
     public $invoiceCounter;
     public $invoiceTypes = [];
     public $quotationTypes = [];
+    public $estimate = [];
     public $vat_tax = false;
     public $vatTaxVal = 0;
     public $vatTax_parcentage = false;
@@ -82,6 +83,7 @@ class EstimateCreate extends Component
         Cart::clear();
         $this->productTypes = ProductType::all_product_type();
         $this->quotationTypes = QuotationType::all();
+        $this->estimate = Estimate::all();
         $this->isEdit = false;
         $this->customers = Customer::all_customer();
         $this->products = Product::all_product();
@@ -167,7 +169,6 @@ class EstimateCreate extends Component
 
     public function productEdit($cart_id)
     {
-
         $this->isEdit = true;
         $this->isNewProduct = false;
         $this->cartProduct = Cart::get($cart_id);
@@ -187,7 +188,6 @@ class EstimateCreate extends Component
 
     public function updateProduct()
     {
-
         $validatedData = Validator::make($this->addpro, [
             'product_id' => 'required',
             'unit' => 'required',
@@ -198,7 +198,7 @@ class EstimateCreate extends Component
         ])->validate();
 
         $item = Product::findOrFail($this->addpro['product_id']);
-
+        // dd($item);
         $price = $validatedData['price'];
         if ($this->addpro['vat_tax'] == 'true') {
             $vatTax = floatval($this->addpro['vatTaxVal']);
@@ -492,6 +492,31 @@ class EstimateCreate extends Component
             $this->tax = 0;
         }
 
+
+        if (!is_numeric($this->discount)) {
+            $this->dispatchBrowserEvent('invoice-store', [
+                'type' => 'error',
+                'title' => 'Please input valid discount amount',
+            ]);
+            return false;
+        }
+        if (!is_numeric($this->vat)) {
+            $this->dispatchBrowserEvent('invoice-store', [
+                'type' => 'error',
+                'title' => 'Please input valid vat amount',
+            ]);
+            return false;
+        }
+        if (!is_numeric($this->tax)) {
+            $this->dispatchBrowserEvent('invoice-store', [
+                'type' => 'error',
+                'title' => 'Please input valid tax amount',
+            ]);
+            return false;
+        }
+
+
+
         $quotation_type_id = $this->state['quotation_type_id'];
         $customer_id = $this->state['customer_id'];
         $estimate_date = $this->state['estimate_date'] ?? null;
@@ -516,26 +541,29 @@ class EstimateCreate extends Component
             $work_completion = $fileName;
         }
 
-
-        if ($this->discount_percent == true) {
-            $this->discount = ($cartTotal * $this->discount) / 100;
+        if ($this->discount_percent) {
+            $cartDiscount = ($cartTotal * $this->discount) / 100;
+        } else {
+            $cartDiscount = $this->discount;
         }
 
-        $discount = floatval($this->discount);
-        $floatVat = floatval($this->vat);
-        $floatTax = floatval($this->tax);
-        $total = floor((($cartTotal * 100) / (100 - ($floatVat + $floatTax))) - $discount);
-
-        if ($this->vat_percent == true || $this->tax_percent == true) {
-            $this->vat = ($cartTotal * $this->vat) / 100;
-            $this->tax = ($cartTotal * $this->tax) / 100;
+        if ($this->vat_percent || $this->tax_percent) {
+            $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
+            $this->due = $total_payable - $cartDiscount;
+        } else {
+            $total_payable = ($cartTotal + $this->vat + $this->tax);
+            $this->due = $total_payable - $cartDiscount;
         }
+
+        $subtotal = number_format($cartTotal, 2, ".", "");
+        $discount = number_format($cartDiscount, 2, ".", "");
 
         $agreementCounter = AgreementCounter::find(1);
         $estimateCounter = EstimateCounter::find(1);
         $invoiceCounter = InvoiceCounter::find(1);
         $cartContents = \Cart::getContent();
         $quotationType = QuotationType::find($quotation_type_id);
+
 
         $estimate = new Estimate;
         $estimate->customer_id = $customer_id;
@@ -547,11 +575,11 @@ class EstimateCreate extends Component
         $estimate->estimate_date = $estimate_date;
         $estimate->expiry_date = $expiry_date;
         $estimate->note = $note;
-        $estimate->sub_total = $cartTotal;
+        $estimate->sub_total = $subtotal;
         $estimate->discount = $discount;
         $estimate->tax = $this->tax;
         $estimate->vat = $this->vat;
-        $estimate->total = $total;
+        $estimate->total = $this->due;
         $estimate->status = 'draft';
         $estimate->work_order = $work_order;
         $estimate->work_completion = $work_completion;
@@ -561,6 +589,7 @@ class EstimateCreate extends Component
         $estimate->date_visibility = $this->state['date_visibility'];
         $estimate->auto_seal_signature = $this->state['auto_seal_signature'];
         $estimate->save();
+
 
         foreach ($cartContents as $cartContent) {
             $estimateDetail = new EstimateDetail;
@@ -602,8 +631,6 @@ class EstimateCreate extends Component
             $this->tax = 0;
         }
 
-
-
         if (!is_numeric($this->discount)) {
             $this->discount = 0;
         }
@@ -614,19 +641,18 @@ class EstimateCreate extends Component
             $this->tax = 0;
         }
 
-
-
-
-
         if ($this->discount_percent) {
             $cartDiscount = ($cartTotal * $this->discount) / 100;
         } else {
             $cartDiscount = $this->discount;
         }
 
-
-
-        $total_payable = ($cartTotal * 100) / (100 - (floatval($this->vat) + floatval($this->tax))) - $cartDiscount;
-        $this->due = $total_payable - $cartDiscount;
+        if ($this->vat_percent || $this->tax_percent) {
+            $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
+            $Totalpayment = $cartDiscount + $this->payment;
+            $this->due = $total_payable - $Totalpayment;
+        } else {
+            $this->due = ($cartTotal + $this->vat + $this->tax) - $cartDiscount;
+        }
     }
 }

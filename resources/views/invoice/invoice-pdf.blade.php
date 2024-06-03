@@ -81,13 +81,12 @@
     </p>
 
     <br>
-    <p><strong>Subject:</strong> <span
-        style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{$invoice->subject}}</span></p>
+    <p><b>Subject:</b> <span style="border-bottom:1px solid; padding-bottom:4px">{{$invoice->subject}}</span></p>
     <br>
 
     <p>
       Dear Sir,<br>
-      <span style="font-family:siliguri">{{$invoice->description}}</span>
+      {{$invoice->description}}
     </p>
     <br>
     <table id="details">
@@ -95,7 +94,6 @@
         <tr>
           <th>Sl No.</th>
           <th>Item</th>
-          <th>Image</th>
           <th>Qty</th>
           <th>Unit</th>
           <th style="text-align:right">Unit Price</th>
@@ -110,11 +108,7 @@
         <tr>
           <td>{{$loop->iteration}}</td>
           <td>{{$invoice_detail->product->name}}</td>
-          <td style="text-align:center">
-            @if($invoice_detail->product->image)
-            <img height="60px" width="100px" src="{{ asset('storage/' . $invoice_detail->product->image) }}" alt="">
-            @endif
-          </td>
+
           <td>{{$invoice_detail->quantity}}</td>
           <td>{{$invoice_detail->product->unit->name}}</td>
           <td style="text-align:right">{{number_format((float)$invoice_detail->price, 2, '.', ',')}}</td>
@@ -130,34 +124,33 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="6" style="text-align:center">Total</td>
+          <td colspan="5" style="text-align:center">Total</td>
           <td style="text-align:right">{{number_format((float)$total, 2, '.', ',')}}</td>
         </tr>
         @if($invoice->discount>0)
         <tr>
-          <td colspan="6" style="text-align:center">Discount</td>
-          <td style="text-align:right">{{number_format((float)$invoice->discount, 2, '.', ',')}}</td>
+          <td colspan="5" style="text-align:center">Discount</td>
+          <td style="text-align:right">{{number_format((float)$invoice->total*$invoice->discount/100, 2, '.', ',')}}
+          </td>
         </tr>
         @endif
 
         @if($invoice->vat>0)
         <tr>
-          <td colspan="6" style="text-align:center">VAT ({{number_format((float)($invoice->vat*100)/$total, 2, '.',
-            '')}} %)</td>
-          <td style="text-align:right">{{number_format((float)$invoice->vat, 2, '.', ',')}}</td>
+          <td colspan="5" style="text-align:center">VAT {{$invoice->vat}} %</td>
+          <td style="text-align:right">{{number_format((float)$invoice->total*$invoice->vat/100, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         @if($invoice->tax>0)
         <tr>
-          <td colspan="6" style="text-align:center">IT ({{number_format((float)($invoice->tax*100)/$total, 2, '.', '')}}
-            %)</td>
-          <td style="text-align:right">{{number_format((float)$invoice->tax, 2, '.', ',')}}</td>
+          <td colspan="5" style="text-align:center">TAX {{$invoice->tax}} %</td>
+          <td style="text-align:right">{{number_format((float)$invoice->total*$invoice->tax/100, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         <tr>
-          <td colspan="6" style="text-align:center">Grand Total</td>
+          <td colspan="5" style="text-align:center">Grand Total</td>
           <td style="text-align:right">{{number_format((float)$invoice->total, 2, '.', ',')}}</td>
         </tr>
       </tfoot>
@@ -196,7 +189,7 @@
           <img src="{{$employee->signature}}" height="40px">
         </td>
         <td rowspan="2" style="text-align:center; border:none; vertical-align:middle">
-          <img src="/bg/seal.png" height="90px">
+          <img src="/bg/seal.png" height="80px">
         </td>
       </tr>
       @endif

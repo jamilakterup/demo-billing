@@ -254,7 +254,7 @@ class InvoiceNew extends Component
         $discountValue = (int)$this->discount;
         //dd($discountValue);
         $total = \Cart::getTotal();
-        dd($total);
+        // dd($total);
 
         $this->grandTotal = $discountValue + $total;
     }
@@ -433,10 +433,10 @@ class InvoiceNew extends Component
             'format'            => 'A4',
             'orientation'       => 'P',
             'default_font_size' => '12',
-            'margin_top'        => 54,
+            'margin_top'        => 24,
             'margin_right'      => 12,
             'margin_bottom'     => 25,
-            'margin_left'       => 16,
+            'margin_left'       => 27,
             'margin_header'     => 0,
             'margin_footer'     => 0,
             'show_watermark'           => false,
@@ -544,31 +544,25 @@ class InvoiceNew extends Component
 
 
 
-
-
             if ($this->discount_percent) {
                 $cartDiscount = ($cartTotal * $this->discount) / 100;
             } else {
                 $cartDiscount = $this->discount;
             }
 
-            if ($this->vat_percent) {
-                $cartVat = ($cartTotal * $this->vat) / 100;
+
+            if ($this->vat_percent || $this->tax_percent) {
+                $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
+                $Totalpayment = $cartDiscount + $this->payment;
+                $this->due = $total_payable - $Totalpayment;
             } else {
-                $cartVat = $this->vat;
+                $total_payable = ($cartTotal + $this->vat + $this->tax);
+                $Totalpayment = $cartDiscount + $this->payment;
+                $this->due = $total_payable - $Totalpayment;
             }
 
-            if ($this->tax_percent) {
-                $cartTax = ($cartTotal * $this->tax) / 100;
-            } else {
-                $cartTax = $this->tax;
-            }
 
-
-
-
-
-            if (($cartTotal + $cartTax + $cartVat) < ($cartDiscount + $this->payment)) {
+            if (($cartDiscount + $this->payment) > $total_payable) {
                 $this->dispatchBrowserEvent('invoice-store', [
                     'type' => 'error',
                     'title' => 'Invalid due amount',
@@ -602,19 +596,16 @@ class InvoiceNew extends Component
 
             $subtotal = number_format($cartTotal, 2, ".", "");
             $discount = number_format($cartDiscount, 2, ".", "");
-            $vat = number_format($cartVat, 2, ".", "");
-            $tax = number_format($cartTax, 2, ".", "");
-            $total = ($subtotal + $vat + $tax) - $discount;
 
             $newInvoice->sub_total = $subtotal;
             $newInvoice->discount = $discount;
-            $newInvoice->vat = $vat;
-            $newInvoice->tax = $tax;
+            $newInvoice->vat = $this->vat;
+            $newInvoice->tax = $this->tax;
 
 
-            $newInvoice->total = floatval($total);
+            $newInvoice->total = $this->due;
 
-            if (($subtotal + $vat + $tax) == ($discount + $this->payment)) {
+            if (($cartDiscount + $this->payment) == $total_payable) {
                 $newInvoice->status = 1;
             }
             $newInvoice->save();
@@ -684,7 +675,6 @@ class InvoiceNew extends Component
         }
 
 
-
         if (!is_numeric($this->discount)) {
             $this->discount = 0;
         }
@@ -700,30 +690,18 @@ class InvoiceNew extends Component
 
 
 
-
-
         if ($this->discount_percent) {
             $cartDiscount = ($cartTotal * $this->discount) / 100;
         } else {
             $cartDiscount = $this->discount;
         }
 
-        if ($this->vat_percent) {
-            $cartVat = ($cartTotal * $this->vat) / 100;
+        if ($this->vat_percent || $this->tax_percent) {
+            $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
+            $Totalpayment = $cartDiscount + $this->payment;
+            $this->due = $total_payable - $Totalpayment;
         } else {
-            $cartVat = $this->vat;
+            $this->due = ($cartTotal + $this->vat + $this->tax) - $cartDiscount;
         }
-
-        if ($this->tax_percent) {
-            $cartTax = ($cartTotal * $this->tax) / 100;
-        } else {
-            $cartTax = $this->tax;
-        }
-
-
-        // $total_payable = $cartTotal + $cartTax + $cartVat;
-        $total_payable = ($cartTotal * 100) / (100 - ($cartTax + $cartVat));
-        $Totalpayment = $cartDiscount + $this->payment;
-        $this->due = $total_payable - $Totalpayment;
     }
 }

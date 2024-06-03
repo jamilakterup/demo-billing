@@ -84,81 +84,76 @@
 
     <br>
 
-    <p><b>Subject:</b> <span
-        style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{$estimate->subject}}</span></p>
+    <p><b>Subject:</b> <span style="border-bottom:1px solid; padding-bottom:4px">{{$estimate->subject}}</span></p>
     <br>
 
     <p style="line-height:2">
       Dear Sir,<br>
-      <span style="font-family:siliguri;">{{$estimate->description}} </span>
+      {{$estimate->description}}
     </p>
     <br>
     <table id="details">
       <thead>
-        <tr style="text-align:right">
+        <tr>
           <th>Sl No.</th>
           <th>Item</th>
-          <th>Image</th>
           <th>Qty</th>
           <th>Unit</th>
-          <th>Unit Price</th>
-          <th>Amount</th>
+          <th style="text-align:right">Unit Price</th>
+          <th style="text-align:right">Amount</th>
         </tr>
       </thead>
       <tbody>
-
-
+        @php
+        $total=0;
+        @endphp
         @foreach($estimate_details as $estimate_detail)
         <tr>
-          <td style="text-align:center">{{$loop->iteration}}</td>
-          <td style="font-family:siliguri">{{$estimate_detail->product->name}}</td>
-          <td style=" text-align:center">
-            @if($estimate_detail->product->image)
-            <img height="60px" width="100px" src="{{ asset('storage/' . $estimate_detail->product->image) }}" alt="">
-            @endif
-          </td>
-          <td style="text-align:center">{{$estimate_detail->quantity}}</td>
-          <td style="text-align:center">{{$estimate_detail->product->unit->name}}</td>
+          <td>{{$loop->iteration}}</td>
+          <td>{{$estimate_detail->product->name}}</td>
+
+          <td>{{$estimate_detail->quantity}}</td>
+          <td>{{$estimate_detail->product->unit->name}}</td>
           <td style="text-align:right">{{number_format((float)$estimate_detail->price, 2, '.', ',')}}</td>
-          <td style="text-align:right">{{number_format((float)$estimate_detail->price*$estimate_detail->quantity, 2,
-            '.',
+          <td style="text-align:right">{{number_format((float)$estimate_detail->price*$estimate_detail->quantity, 2,'.',
             ',')}}
           </td>
         </tr>
+        @php
+        $total+=$estimate_detail->price*$estimate_detail->quantity;
+        $grandTotal=$estimate->total;
+        @endphp
         @endforeach
-
       </tbody>
       <tfoot>
-        <?php
-            $grandTotal=$estimate->total;
-            // $grandTotal=$estimate->estimate_details->sum('total');
-            // $grandTotal=($grandTotal-$estimate->discount)+$estimate->vat+$estimate->tax;
-        ?>
-
-
+        <tr>
+          <td colspan="5" style="text-align:center">Total</td>
+          <td style="text-align:right">{{number_format((float)$total, 2, '.', ',')}}</td>
+        </tr>
         @if($estimate->discount>0)
         <tr>
-          <td colspan="6" style="text-align:center">Discount</td>
-          <td style="text-align:right">{{number_format((float)$estimate->discount, 2, '.', '')}}</td>
+          <td colspan="5" style="text-align:center">Discount</td>
+          <td style="text-align:right">{{number_format((float)$estimate->total*$estimate->discount/100, 2, '.', ',')}}
+          </td>
         </tr>
         @endif
 
         @if($estimate->vat>0)
         <tr>
-          <td colspan="6" style="text-align:center">Vat</td>
-          <td style="text-align:right">{{number_format((float)$estimate->vat, 2, '.', ',')}}</td>
+          <td colspan="5" style="text-align:center">VAT {{$estimate->vat}} %</td>
+          <td style="text-align:right">{{number_format((float)$estimate->total*$estimate->vat/100, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         @if($estimate->tax>0)
         <tr>
-          <td colspan="6" style="text-align:center">Tax</td>
-          <td style="text-align:right">{{number_format((float)$estimate->tax, 2, '.', ',')}}</td>
+          <td colspan="5" style="text-align:center">TAX {{$estimate->tax}} %</td>
+          <td style="text-align:right">{{number_format((float)$estimate->total*$estimate->tax/100, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         <tr>
-          <td colspan="6" style="text-align:center">Total Amount</td>
+          <td colspan="5" style="text-align:center">Grand Total</td>
           <td style="text-align:right">{{number_format((float)$grandTotal, 2, '.', ',')}}</td>
         </tr>
       </tfoot>
