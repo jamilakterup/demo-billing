@@ -37,7 +37,7 @@
 <body>
     <section>
         <div class="text-center">
-            <img style="width:245px;" src="{{asset('logo/rajit.png')}}" alt="">
+            <img style="width:245px;" src="{{asset('logo/nbelogo.png')}}" alt="">
             <p class="text-center base" style="margin-bottom:-10px">H#122, Gonokpara, Ghoramara, Boalia,
                 Rajshahi-6100 Bangladesh,Phone
                 : +8801762623193,
@@ -47,7 +47,7 @@
 
         <div>
             <p class="base" style="text-align:left; margin-bottom:-20px">SN:
-                <strong><em>{{ \Carbon\Carbon::parse($payment['invoice']['date'])->format('ym') .
+                <strong><em>{{ \Carbon\Carbon::parse($payment['date'])->format('ym') .
                         $payment['invoice']['number'] }}</em></strong>
             </p>
             <p class="base" style="text-align:right; margin-top:-50px">Date: {{ date('d-m-Y',
@@ -66,7 +66,7 @@
                     ?>
             by Cash/ChequeNo__________________________ Bank_________________________
             Branch______________________Dated
-            {{ date('d-m-y', strtotime($payment['date'])) }} on account of <span
+            {{ date('d-m-Y', strtotime($payment['date'])) }} on account of <span
                 class="bold">{{substr($payment['invoice']['subject'],9)}}</span>
 
         </p>
