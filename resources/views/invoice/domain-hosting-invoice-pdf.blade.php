@@ -112,7 +112,7 @@
         @foreach($invoice_details as $invoice_detail)
         <tr>
           <td>{{$loop->iteration}}</td>
-          <td>
+          <td class="font-family:siliguri">
             {{$invoice_detail->product->name}}<br>
             <?php
           //$date=date_create($invoice->recurring_start_date);

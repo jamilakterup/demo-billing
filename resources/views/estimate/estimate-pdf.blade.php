@@ -84,12 +84,13 @@
 
     <br>
 
-    <p><b>Subject:</b> <span style="border-bottom:1px solid; padding-bottom:4px">{{$estimate->subject}}</span></p>
+    <p><strong>Subject:</strong> <span
+        style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{$estimate->subject}}</span></p>
     <br>
 
     <p style="line-height:2">
       Dear Sir,<br>
-      {{$estimate->description}}
+      <span style="font-family:siliguri">{{$estimate->description}}</span>
     </p>
     <br>
     <table id="details">
@@ -113,8 +114,7 @@
         {{-- {{dd($estimate_details)}} --}}
         <tr>
           <td>{{$loop->iteration}}</td>
-          <td>{{$estimate_detail->product->name}}</td>
-
+          <td class="font-family:siliguri">{{$estimate_detail->product->name}}</td>
           <td>{{$estimate_detail->quantity}}</td>
           <td>{{$estimate_detail->product->unit->name}}</td>
           <td style="text-align:right">{{number_format((float)$estimate_detail->price, 2, '.', ',')}}</td>

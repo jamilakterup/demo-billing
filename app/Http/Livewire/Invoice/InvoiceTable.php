@@ -58,14 +58,12 @@ class InvoiceTable extends Component
     public $unit;
     public $price;
     public $quantity;
-    public $searchItem;
 
 
     public function mount()
     {
         \Cart::clear();
         $this->invoiceTypes = InvoiceType::all();
-        $this->searchItem = '';
     }
 
     public function delete($delete_item_id)
@@ -488,10 +486,10 @@ class InvoiceTable extends Component
             'format'            => 'A4',
             'orientation'       => 'P',
             'default_font_size' => '12',
-            'margin_top'        => 24,
+            'margin_top'        => 54,
             'margin_right'      => 12,
             'margin_bottom'     => 25,
-            'margin_left'       => 27,
+            'margin_left'       => 16,
             'margin_header'     => 0,
             'margin_footer'     => 0,
             'show_watermark'           => false,
@@ -573,27 +571,9 @@ class InvoiceTable extends Component
     }
 
 
-    public function updatedSearchField()
-    {
-        if ($this->searchField == 'paid') {
-            $this->searchItem = 1;
-        } elseif ($this->searchField == 'unpaid') {
-            $this->searchItem = 0;
-        } else {
-            $this->searchItem = '';
-        }
-    }
-
 
     public function render()
     {
-        $searchItem = '';
-        if ($this->searchField == 'paid') {
-            $searchItem = 1;
-        } elseif ($this->searchField == 'unpaid') {
-            $searchItem = 0;
-        }
-
         $carts = \Cart::getContent();
         $cartTotal = \Cart::getTotal();
         $discount = $this->discount;
@@ -604,18 +584,20 @@ class InvoiceTable extends Component
         $withdue = (int)$cartTotal - ((int)$payment + (int)$discount);
 
 
-        $invoices = Invoice::where('cancellation', 0)
-            ->where(function ($query) {
-                if ($this->searchField) {
-                    $query->where('number', 'like', '%' . $this->searchField . '%')
-                        ->orWhere('date', 'like', '%' . $this->searchField . '%')
-                        ->orWhereHas('customer', function ($customerQuery) {
-                            $customerQuery->where('name', 'like', '%' . $this->searchField . '%');
-                        });
-                }
-                if ($this->searchItem) {
-                    $query->orWhere('status', $this->searchItem);
-                }
+        $searchTerm = strtolower($this->searchField);
+        $statusValue = null;
+
+        if ($searchTerm === 'paid') {
+            $statusValue = 1;
+        } elseif ($searchTerm === 'unpaid') {
+            $statusValue = 0;
+        }
+        $invoices = Invoice::with('customer')
+            ->where('number', 'like', '%' . $this->searchField . '%')
+            ->orWhere('date', 'like', '%' . $this->searchField . '%')
+            ->orWhere('status', $statusValue)
+            ->orWhereHas('customer', function ($query) {
+                $query->where('name', 'like', '%' . $this->searchField . '%');
             })
             ->orderBy('id', 'desc')
             ->paginate(10);

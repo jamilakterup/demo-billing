@@ -82,12 +82,13 @@
 
 
     <br>
-    <p><b>Subject:</b> <span style="border-bottom:1px solid; padding-bottom:4px">{{$invoice['subject']}}</span></p>
+    <p><strong>Subject:</strong> <span
+        style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{$invoice->subject}}</span></p>
 
     <br>
     <p>
       Dear Sir,<br>
-      {{$invoice['description']}}
+      <span style="font-family:siliguri">{{$invoice->description}}</span>
     </p>
     <br>
     <table id="details">
@@ -111,7 +112,7 @@
         @foreach($invoice_details as $invoice_detail)
         <tr>
           <td>{{$loop->iteration}}</td>
-          <td>
+          <td class="font-family:siliguri">
             {{$invoice_detail->name}}<br>
             <?php
           $date=date_create($invoice['recurring_start_date']);

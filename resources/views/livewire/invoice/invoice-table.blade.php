@@ -84,8 +84,8 @@
                                                 @endif
                                             </td>
                                             <td>{{$invoice->total}}</td>
-                                            <td>{{$invoice->sub_total}}</td>
-                                            {{-- <td>{{\App\Models\Invoice::get_due($invoice->id)}}</td> --}}
+                                            {{-- <td>{{$invoice->discount}}</td> --}}
+                                            <td>{{\App\Models\Invoice::get_due($invoice->id)}}</td>
 
 
                                             <td>
