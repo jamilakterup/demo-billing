@@ -481,7 +481,7 @@
                     <div class="row g-1 mb-3">
                         <label class="col-sm-4 col-form-label">Vat & Tax <span class="text-danger">*</span></label>
                         <div class="col-sm-8">
-                            <select wire:model.defer="addpro.vat_tax" class="form-control">
+                            <select wire:model.defer="addpro.vat_tax" class="form-control tom-select">
                                 <option value="">-Please select-</option>
                                 <option value="false">No</option>
                                 <option value="true">Yes</option>

@@ -84,13 +84,12 @@
 
     <br>
 
-    <p><strong>Subject:</strong> <span
-        style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{$estimate->subject}}</span></p>
+    <p><b>Subject:</b> <span style="border-bottom:1px solid; padding-bottom:4px">{{$estimate->subject}}</span></p>
     <br>
 
     <p style="line-height:2">
       Dear Sir,<br>
-      <span style="font-family:siliguri">{{$estimate->description}}</span>
+      {{$estimate->description}}
     </p>
     <br>
     <table id="details">
@@ -107,11 +106,15 @@
       <tbody>
         @php
         $total=0;
+        $vat=0;
+        $tax=0;
         @endphp
         @foreach($estimate_details as $estimate_detail)
+        {{-- {{dd($estimate_details)}} --}}
         <tr>
           <td>{{$loop->iteration}}</td>
-          <td style="font-family:siliguri">{{$estimate_detail->product->name}}</td>
+          <td>{{$estimate_detail->product->name}}</td>
+
           <td>{{$estimate_detail->quantity}}</td>
           <td>{{$estimate_detail->product->unit->name}}</td>
           <td style="text-align:right">{{number_format((float)$estimate_detail->price, 2, '.', ',')}}</td>
@@ -121,7 +124,9 @@
         </tr>
         @php
         $total+=$estimate_detail->price*$estimate_detail->quantity;
-        $grandTotal=$estimate->total;
+        $vat=number_format((float)$estimate->total*$estimate->vat/100, 2, '.', '');
+        $tax=number_format((float)$estimate->total*$estimate->tax/100, 2, '.', '');
+        $grandTotal=$estimate->sub_total+$vat+$tax;
         @endphp
         @endforeach
       </tbody>

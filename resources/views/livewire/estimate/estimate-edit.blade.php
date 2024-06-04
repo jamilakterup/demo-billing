@@ -167,7 +167,7 @@
                             <td>
                                 <a class="btn btn-outline-primary btn-sm"
                                     wire:click.prevent="productEdit({{$cart->id}})"><i class="fas fa-edit"></i></a>
-                                <a class="btn btn-outline-danger btn-sm del" type="new" data="{{$cart->id}}"><i
+                                <a class="btn btn-outline-danger btn-sm del" type="edit" data="{{$cart->id}}"><i
                                         class="fas fa-trash"></i></a>
                             </td>
                         </tr>
@@ -425,7 +425,7 @@
                 <div class="row g-1 mb-3">
                     <label class="col-sm-4 col-form-label">Vat & Tax <span class="text-danger">*</span></label>
                     <div class="col-sm-8">
-                        <select wire:model="addpro.vat_tax" class="form-control check include-vat-tax">
+                        <select wire:model="addpro.vat_tax" class="form-control check include-vat-tax tom-select">
                             <option value="">-Please select-</option>
                             <option value="false">No</option>
                             <option value="true">Yes</option>

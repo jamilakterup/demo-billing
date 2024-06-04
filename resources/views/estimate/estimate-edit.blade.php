@@ -2,12 +2,12 @@
 
 @section('style')
 <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
-  integrity="sha512-f0tzWhCwVFS3WeYaofoLWkTP62ObhewQ1EZn65oSYDZUg1+CyywGKkWzm8BxaJj5HGKI72PnMH9jYyIFz+GH7g=="
-  crossorigin="anonymous" referrerpolicy="no-referrer" />
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+    integrity="sha512-f0tzWhCwVFS3WeYaofoLWkTP62ObhewQ1EZn65oSYDZUg1+CyywGKkWzm8BxaJj5HGKI72PnMH9jYyIFz+GH7g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.2.2/css/tom-select.bootstrap4.min.css"
-  integrity="sha512-rSpBVO3jAoJ/9Mqqk9gjVGgZX5ZFiwYXap9xWfweRUoLdSgp8NJ6ERvFc0jW+VsaVLQY4QJts1MF9TQxiP8IEA=="
-  crossorigin="anonymous" referrerpolicy="no-referrer" />
+    integrity="sha512-rSpBVO3jAoJ/9Mqqk9gjVGgZX5ZFiwYXap9xWfweRUoLdSgp8NJ6ERvFc0jW+VsaVLQY4QJts1MF9TQxiP8IEA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="{{asset('plugins/printjs/print.min.css')}}" rel="stylesheet" type="text/css">
 @livewireStyles
 @endsection
@@ -15,26 +15,26 @@
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Create Quotation</h1>
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Create Quotation</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Quotation</li>
+                    </ol>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Quotation</li>
-          </ol>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Main content -->
-  @livewire('estimate.estimate-edit', ['estimate_id' => $estimate->id])
-  <!-- /.content -->
+    <!-- Main content -->
+    @livewire('estimate.estimate-edit', ['estimate_id' => $estimate->id])
+    <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 
@@ -47,12 +47,12 @@
 <x-livewiremodal-base />
 <!-- Daterange picker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
-  integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tom-select/2.2.2/js/tom-select.complete.js"
-  integrity="sha512-KfTOBVJv8qnV1b+2tsbTLepS7+RAgmVV0Odk6cj1eHxbR8WFX99gwIWOutwFAUlsve3FaGG3VxoPWWLRnehX1w=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    integrity="sha512-KfTOBVJv8qnV1b+2tsbTLepS7+RAgmVV0Odk6cj1eHxbR8WFX99gwIWOutwFAUlsve3FaGG3VxoPWWLRnehX1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 <script src="{{asset('plugins/printjs/print.min.js')}}"></script>
 
@@ -63,7 +63,7 @@
 
 
 <script>
-  $(document).on('change','#type',function(e){
+    $(document).on('change','#type',function(e){
         var invoiceType=$(this).val();
         if(invoiceType==1){
             $('#interval-container').css('display','block');
@@ -76,7 +76,7 @@
 
 
 <script>
-  $(function () {
+    $(function () {
         bsCustomFileInput.init();
         });
 
@@ -278,7 +278,7 @@
 
 
 <script>
-  window.addEventListener('is_delete_confirm',function(event){
+    window.addEventListener('is_delete_confirm',function(event){
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -367,7 +367,7 @@ window.addEventListener('message',function(e){
 </script>
 
 <script>
-  window.addEventListener('invoice-store',function(e){
+    window.addEventListener('invoice-store',function(e){
         if(e.detail.type=='error')
         {
             Swal.fire(
@@ -461,6 +461,7 @@ window.addEventListener('message',function(e){
 
     
 
+
     $(document).on("click",".del",function(){
         Swal.fire({
             title: 'Are you sure?',
@@ -476,7 +477,10 @@ window.addEventListener('message',function(e){
 
                     var type=$(this).attr("type");
                     if(type=="new"){
-                        Livewire.emitTo('estimate.estimate-create','cartDelete',delid);
+                        Livewire.emitTo('estimate.estimate-new','cartDelete',delid);
+                    }
+                    else{
+                        Livewire.emitTo('estimate.estimate-edit','cartDelete',delid);
                     }
                 }
         });
@@ -557,24 +561,44 @@ window.addEventListener('message',function(e){
             let payment = parseFloat($('.payment').val()) || 0;
             let total= parseFloat($('.total').val()) || 0;
 
-
-            // Calculate discount based on checkbox state
             if (discount_percent==true) {
                 discount = (total * discount) / 100;
             }else{
                 discount = parseFloat($('.discount').val()) || 0;
             }
-
-            // Calculate totalWith using the formula
-            if(vat_percent==true || tax_percent==true){
-                var totalWith = (total * 100) / (100 - (vat + tax));
-            }else{
-                var totalWith=total+tax+vat;
+            if (vat_percent==true) {
+            vat = (total * vat) / 100;
+            } else {
+                vat = parseFloat($('.vat').val()) || 0;
+            }
+            if (tax_percent==true) {
+            tax = (total * tax) / 100;
+            } else {
+                tax = parseFloat($('.tax').val()) || 0;
             }
 
-            // console.log(totalWith,vat_percent,tax_percent,discount_percent,discount)
+            // Calculate totalWith using the formula
+            var totalWith = total + vat + tax;
             let due = totalWith - (discount + payment);
             $('.due').val(due);
+
+            // // Calculate discount based on checkbox state
+            // if (discount_percent==true) {
+            //     discount = (total * discount) / 100;
+            // }else{
+            //     discount = parseFloat($('.discount').val()) || 0;
+            // }
+
+            // // Calculate totalWith using the formula
+            // if(vat_percent==true || tax_percent==true){
+            //     var totalWith = (total * 100) / (100 - (vat + tax));
+            // }else{
+            //     var totalWith=total+tax+vat;
+            // }
+
+            // // console.log(totalWith,vat_percent,tax_percent,discount_percent,discount)
+            // let due = totalWith - (discount + payment);
+            // $('.due').val(due);
         }
 
     });
@@ -605,7 +629,7 @@ window.addEventListener('message',function(e){
 
 
 <script>
-  $(function () {
+    $(function () {
       $("#example1").DataTable({
         "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]

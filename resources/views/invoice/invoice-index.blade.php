@@ -248,18 +248,31 @@
             // console.log(total)
 
             // Calculate discount based on checkbox state
+        
+
             if (discount_percent==true) {
                 discount = (total * discount) / 100;
             }else{
                 discount = parseFloat($('.discount').val()) || 0;
             }
+            if (vat_percent==true) {
+            vat = (total * vat) / 100;
+            } else {
+                vat = parseFloat($('.vat').val()) || 0;
+            }
+            if (tax_percent==true) {
+            tax = (total * tax) / 100;
+            } else {
+                tax = parseFloat($('.tax').val()) || 0;
+            }
 
             // Calculate totalWith using the formula
-            if(vat_percent==true || tax_percent==true){
-                var totalWith = (total * 100) / (100 - (vat + tax));
-            }else{
-                var totalWith=total+tax+vat;
-            }
+            var totalWith = total + vat + tax;
+            // if(vat_percent==true || tax_percent==true){
+            //     // var totalWith = (total * 100) / (100 - (vat + tax));
+            // }else{
+            //     var totalWith=total+tax+vat;
+            // }
 
             // console.log(totalWith,vat_percent,tax_percent,discount_percent,discount)
             let due = totalWith - (discount + payment);

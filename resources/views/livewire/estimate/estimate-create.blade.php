@@ -110,7 +110,7 @@
                 @endif
             </div>
             <div class="form-group col-md-4">
-                <label for="date_visibility">Invoice date visibility</label>
+                <label for="date_visibility">Quotatoin date visibility</label>
                 <select class="form-control @error('date_visibility') is-invalid @enderror"
                     wire:model.defer="state.date_visibility" id="date_visibility">
                     <option value="">-Please select-</option>
@@ -226,7 +226,7 @@
                         </tr>
 
                         <tr>
-                            <td colspan="5" class="text-center">Due</td>
+                            <td colspan="5" class="text-center">Sub Total</td>
                             <td><input type="text" wire:model.defer="due" class="form-control due" disabled /></td>
                             <td></td>
                         </tr>
@@ -422,7 +422,7 @@
                 <div class="row g-1 mb-3">
                     <label class="col-sm-4 col-form-label">Vat & Tax <span class="text-danger">*</span></label>
                     <div class="col-sm-8">
-                        <select wire:model="addpro.vat_tax" class="form-control check include-vat-tax">
+                        <select wire:model="addpro.vat_tax" class="form-control check include-vat-tax tom-select">
                             <option value="">-Please select-</option>
                             <option value="false">No</option>
                             <option value="true">Yes</option>

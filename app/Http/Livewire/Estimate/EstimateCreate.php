@@ -3,27 +3,26 @@
 namespace App\Http\Livewire\Estimate;
 
 use App\Models\AgreementCounter;
-use App\Models\Customer;
-use App\Models\InvoiceCounter;
-use App\Models\InvoiceType;
-use App\Models\Product;
-use App\Models\ProductType;
-use App\Models\Unit;
-use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Estimate;
 use App\Models\EstimateCounter;
 use App\Models\EstimateDetail;
-use App\Models\Invoice;
-use App\Models\InvoiceDetail;
+use App\Models\Product;
+use App\Models\ProductType;
+use App\Models\Unit;
+use App\Models\InvoiceCounter;
 use App\Models\QuotationType;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
-use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Cart;
 use PDF;
+use Illuminate\Support\ServiceProvider;
 use Auth;
+use Livewire\WithFileUploads;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class EstimateCreate extends Component
@@ -50,10 +49,8 @@ class EstimateCreate extends Component
     public $cartTotal;
     public $isEdit = false;
     public $isNewProduct = false;
-    public $invoiceCounter;
-    public $invoiceTypes = [];
+    public $estimateCounter;
     public $quotationTypes = [];
-    public $estimate = [];
     public $vat_tax = false;
     public $vatTaxVal = 0;
     public $vatTax_parcentage = false;
@@ -67,14 +64,11 @@ class EstimateCreate extends Component
     public $discount_percent;
     public $vat_percent;
     public $tax_percent;
-    public $grandTotal;
 
     public $product_id;
     public $unit;
     public $price;
     public $quantity;
-    public $work_order_file;
-    public $work_completion_file;
 
     public $cartProduct;
 
@@ -83,13 +77,12 @@ class EstimateCreate extends Component
         Cart::clear();
         $this->productTypes = ProductType::all_product_type();
         $this->quotationTypes = QuotationType::all();
-        $this->estimate = Estimate::all();
         $this->isEdit = false;
         $this->customers = Customer::all_customer();
         $this->products = Product::all_product();
         $this->units = Unit::all_unit();
         $this->state = [];
-        $this->state['number'] = InvoiceCounter::find(1)->number;
+        $this->state['number'] = EstimateCounter::find(1)->number;
     }
 
     public function render()
@@ -99,6 +92,7 @@ class EstimateCreate extends Component
 
     public function newProductToggle()
     {
+
         if ($this->isNewProduct) {
             $this->isNewProduct = false;
             $this->products = Product::all_product();
@@ -198,7 +192,7 @@ class EstimateCreate extends Component
         ])->validate();
 
         $item = Product::findOrFail($this->addpro['product_id']);
-        // dd($item);
+
         $price = $validatedData['price'];
         if ($this->addpro['vat_tax'] == 'true') {
             $vatTax = floatval($this->addpro['vatTaxVal']);
@@ -243,22 +237,23 @@ class EstimateCreate extends Component
 
     public function deleteConfirmedItem()
     {
-        $delete_item = Invoice::findOrFail($this->beingDeleteItem);
-        $delete_item->delete();
-        InvoiceDetail::where('invoice_id', $this->beingDeleteItem)->delete();
+        Estimate::findOrFail($this->beingDeleteItem)->delete();
+        EstimateDetail::where('estimate_id', $this->beingDeleteItem)->delete();
+
         $this->dispatchBrowserEvent('delete_confirm', ['title' => 'Invoice has been deleted succesfully.']);
     }
 
 
-    public function grandTotal_Change()
-    {
+    // public function grandTotal_Change()
+    // {
 
-        $discountValue = (int)$this->discount;
-        //dd($discountValue);
-        $total = \Cart::getTotal();
+    //     $discountValue = (int)$this->discount;
+    //     //dd($discountValue);
+    //     $total = \Cart::getTotal();
+    //     // dd($total);
 
-        $this->grandTotal = $discountValue + $total;
-    }
+    //     $this->grandTotal = $discountValue + $total;
+    // }
 
     public function itemAssign($product_id)
     {
@@ -271,7 +266,6 @@ class EstimateCreate extends Component
 
     public function quotationType($quotation_type_id)
     {
-
         if ($quotation_type_id != "") {
             $quotationType = QuotationType::findOrFail($quotation_type_id);
             $this->state['subject'] = $quotationType->subject;
@@ -290,17 +284,17 @@ class EstimateCreate extends Component
             'unit' => 'required',
             'price' => 'required|numeric',
             'vat_tax' => 'required',
-            'quantity' => 'required|numeric|min:1',
+            'quantity' => 'required|numeric|min:0',
 
         ])->validate();
 
         $item = Product::findOrFail($this->addpro['product_id']);
-        // if (Cart::isEmpty()) {
-        //     $uid = 1;
-        // } else {
-        //     $lastItem = Cart::getContent()->last();
-        //     $uid = $lastItem->id + 1;
-        // }
+        if (Cart::isEmpty()) {
+            $uid = 1;
+        } else {
+            $lastItem = Cart::getContent()->last();
+            $uid = $lastItem->id + 1;
+        }
 
         $price = $this->addpro['price'];
 
@@ -310,7 +304,7 @@ class EstimateCreate extends Component
             $price = floatval(number_format($price, 2, ".", ""));
         }
         Cart::add([
-            'id' => $item->id,
+            'id' => $uid,
             'name' => $item->name,
             'quantity' => $this->addpro['quantity'],
             'price' => $price,
@@ -334,7 +328,6 @@ class EstimateCreate extends Component
     }
 
 
-
     public function cartDelete($id)
     {
         \Cart::remove($id);
@@ -345,107 +338,6 @@ class EstimateCreate extends Component
             'type' => 'error',
             'title' => 'Please input valid discount amount',
             'msg' => 'Product deleted successfully.',
-        ]);
-    }
-
-    public function invoicePreview()
-    {
-        $validatedData = Validator::make($this->state, [
-            'customer_id' => 'required',
-            'quotation_type_id' => 'required',
-            'number' => 'required',
-            'date' => 'required|date',
-            'expected_payment_date' => 'required|date',
-            'type' => 'required',
-            'subject' => 'required|string|max:500',
-            'description' => 'required|string|max:500',
-            'vat_text_visibility' => 'required',
-            'date_visibility' => 'required',
-            'auto_seal_signature' => 'required',
-            'recurring_interval' => 'exclude_if:type,0|required',
-            'recurring_start_date' => 'exclude_if:type,0|required',
-
-        ], [
-            'quotation_type_id.required' => 'The invoice type field is required.'
-        ])->validate();
-
-        $upload_dir = public_path();
-        $newFileName = 'invoice_' . time() . '_' . $this->state['number'] . '.pdf';
-        $filename = $upload_dir . '/pdf/' . $newFileName . '';
-
-        $file_path = public_path() . '/pdf/' . $newFileName;
-        if (file_exists($file_path)) {
-            unlink($file_path);
-        }
-
-
-        if ($validatedData['quotation_type_id'] == 1) {
-            $temp = 'invoice.preview-invoice-pdf';
-        } elseif ($validatedData['quotation_type_id'] == 2) {
-            $temp = 'invoice.preview-domain-hosting-invoice-pdf';
-        } else {
-            $temp = 'invoice.preview-invoice-pdf';
-        }
-
-
-        if ($this->discount == '') {
-            $this->discount = 0;
-        }
-        if ($this->vat == '') {
-            $this->vat = 0;
-        }
-        if ($this->tax == '') {
-            $this->tax = 0;
-        }
-
-        $invoiceType = QuotationType::find($validatedData['quotation_type_id']);
-        $employee = Employee::find($invoiceType->employee_id);
-        $customer = Customer::find($validatedData['customer_id']);
-        $invoice = $validatedData;
-        $invoice_details = \Cart::getContent();
-        $cartTotal = \Cart::getTotal();
-
-        if ($this->discount_percent) {
-            $cartDiscount = ($cartTotal * $this->discount) / 100;
-        } else {
-            $cartDiscount = $this->discount;
-        }
-
-        if ($this->vat_percent) {
-            $cartVat = ($cartTotal * $this->vat) / 100;
-        } else {
-            $cartVat = $this->vat;
-        }
-
-        if ($this->tax_percent) {
-            $cartTax = ($cartTotal * $this->tax) / 100;
-        } else {
-            $cartTax = $this->tax;
-        }
-
-
-        $mpdf = PDF::loadView($temp, compact('invoice_details', 'invoice', 'invoiceType', 'employee', 'customer', 'cartDiscount', 'cartVat', 'cartTax'), [], [
-            'title'             => 'Invoice',
-            'format'            => 'A4',
-            'orientation'       => 'P',
-            'default_font_size' => '12',
-            'margin_top'        => 24,
-            'margin_right'      => 12,
-            'margin_bottom'     => 25,
-            'margin_left'       => 27,
-            'margin_header'     => 0,
-            'margin_footer'     => 0,
-            'show_watermark'           => false,
-            'display_mode'               => 'fullpage',
-            'show_watermark_image'     => true,
-            'watermark_image_alpha'    => 1,
-            'watermark_image_path'       => asset('bg/pad.jpg'),
-        ])->save($filename);
-
-        //dd($filename);
-
-        $this->dispatchBrowserEvent('invoice-preview', [
-            'invoiceName' => $newFileName,
         ]);
     }
 
@@ -516,6 +408,27 @@ class EstimateCreate extends Component
         }
 
 
+        if ($this->discount_percent) {
+            $cartDiscount = ($cartTotal * $this->discount) / 100;
+        } else {
+            $cartDiscount = $this->discount;
+        }
+        if ($this->vat_percent) {
+            $cartVat = ($cartTotal * $this->vat) / 100;
+        } else {
+            $cartVat = $this->vat;
+        }
+        if ($this->tax_percent) {
+            $cartTax = ($cartTotal * $this->tax) / 100;
+        } else {
+            $cartTax = $this->tax;
+        }
+
+        $this->due  = $cartTotal + $cartVat + $cartTax;
+
+        $subtotal = number_format($cartTotal, 2, ".", "");
+        $discount = number_format($cartDiscount, 2, ".", "");
+
 
         $quotation_type_id = $this->state['quotation_type_id'];
         $customer_id = $this->state['customer_id'];
@@ -525,6 +438,13 @@ class EstimateCreate extends Component
         $note = $this->state['note'] ?? null;
         $work_order = null;
         $work_completion = null;
+
+        $agreementCounter = AgreementCounter::find(1);
+        $estimateCounter = EstimateCounter::find(1);
+        $invoiceCounter = InvoiceCounter::find(1);
+        $cartContents = \Cart::getContent();
+        $quotationType = QuotationType::find($quotation_type_id);
+
 
         if (isset($this->state['work_order'])) {
             $file = $this->state['work_order'];
@@ -540,30 +460,6 @@ class EstimateCreate extends Component
             $file->storeAs('public', $fileName);
             $work_completion = $fileName;
         }
-
-        if ($this->discount_percent) {
-            $cartDiscount = ($cartTotal * $this->discount) / 100;
-        } else {
-            $cartDiscount = $this->discount;
-        }
-
-        if ($this->vat_percent || $this->tax_percent) {
-            $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
-            $this->due = $total_payable - $cartDiscount;
-        } else {
-            $total_payable = ($cartTotal + $this->vat + $this->tax);
-            $this->due = $total_payable - $cartDiscount;
-        }
-
-        $subtotal = number_format($cartTotal, 2, ".", "");
-        $discount = number_format($cartDiscount, 2, ".", "");
-
-        $agreementCounter = AgreementCounter::find(1);
-        $estimateCounter = EstimateCounter::find(1);
-        $invoiceCounter = InvoiceCounter::find(1);
-        $cartContents = \Cart::getContent();
-        $quotationType = QuotationType::find($quotation_type_id);
-
 
         $estimate = new Estimate;
         $estimate->customer_id = $customer_id;
@@ -589,7 +485,6 @@ class EstimateCreate extends Component
         $estimate->date_visibility = $this->state['date_visibility'];
         $estimate->auto_seal_signature = $this->state['auto_seal_signature'];
         $estimate->save();
-
 
         foreach ($cartContents as $cartContent) {
             $estimateDetail = new EstimateDetail;
@@ -631,6 +526,7 @@ class EstimateCreate extends Component
             $this->tax = 0;
         }
 
+
         if (!is_numeric($this->discount)) {
             $this->discount = 0;
         }
@@ -641,18 +537,24 @@ class EstimateCreate extends Component
             $this->tax = 0;
         }
 
+
+
         if ($this->discount_percent) {
             $cartDiscount = ($cartTotal * $this->discount) / 100;
         } else {
             $cartDiscount = $this->discount;
         }
-
-        if ($this->vat_percent || $this->tax_percent) {
-            $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
-            $Totalpayment = $cartDiscount + $this->payment;
-            $this->due = $total_payable - $Totalpayment;
+        if ($this->vat_percent) {
+            $cartVat = ($cartTotal * $this->vat) / 100;
         } else {
-            $this->due = ($cartTotal + $this->vat + $this->tax) - $cartDiscount;
+            $cartVat = $this->vat;
         }
+        if ($this->tax_percent) {
+            $cartTax = ($cartTotal * $this->tax) / 100;
+        } else {
+            $cartTax = $this->tax;
+        }
+
+        $this->due = $cartTotal + $cartVat + $cartTax;
     }
 }

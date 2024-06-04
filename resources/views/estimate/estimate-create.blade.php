@@ -367,7 +367,7 @@ window.addEventListener('message',function(e){
 </script>
 
 <script>
-    window.addEventListener('estimate-store',function(e){
+    window.addEventListener('invoice-store',function(e){
         if(e.detail.type=='error')
         {
             Swal.fire(
@@ -432,9 +432,9 @@ window.addEventListener('message',function(e){
     });
 
 
-    window.addEventListener('invoice-preview',function(e){
-        var invoiceName=e.detail.invoiceName;
-        var path='{{asset('/pdf/')}}'+'/'+invoiceName;
+    window.addEventListener('estimate-preview',function(e){
+        var estimateName=e.detail.estimateName;
+        var path='{{asset('/pdf/')}}'+'/'+estimateName;
 
         Swal.fire({
         title: '<strong>Preview</strong>',
@@ -476,11 +476,15 @@ window.addEventListener('message',function(e){
 
                     var type=$(this).attr("type");
                     if(type=="new"){
-                        Livewire.emitTo('estimate.estimate-create','cartDelete',delid);
+                        Livewire.emitTo('estimate.estimate-new','cartDelete',delid);
+                    }
+                    else{
+                        Livewire.emitTo('estimate.estimate-edit','cartDelete',delid);
                     }
                 }
         });
     });
+
 
     $(document).on("click","#allClear",function(){
         Swal.fire({
@@ -558,23 +562,45 @@ window.addEventListener('message',function(e){
             let total= parseFloat($('.total').val()) || 0;
 
 
-            // Calculate discount based on checkbox state
+
             if (discount_percent==true) {
                 discount = (total * discount) / 100;
             }else{
                 discount = parseFloat($('.discount').val()) || 0;
             }
-
-            // Calculate totalWith using the formula
-            if(vat_percent==true || tax_percent==true){
-                var totalWith = (total * 100) / (100 - (vat + tax));
-            }else{
-                var totalWith=total+tax+vat;
+            if (vat_percent==true) {
+            vat = (total * vat) / 100;
+            } else {
+                vat = parseFloat($('.vat').val()) || 0;
+            }
+            if (tax_percent==true) {
+            tax = (total * tax) / 100;
+            } else {
+                tax = parseFloat($('.tax').val()) || 0;
             }
 
-            // console.log(totalWith,vat_percent,tax_percent,discount_percent,discount)
+            // Calculate totalWith using the formula
+            var totalWith = total + vat + tax;
             let due = totalWith - (discount + payment);
             $('.due').val(due);
+
+            // // Calculate discount based on checkbox state
+            // if (discount_percent==true) {
+            //     discount = (total * discount) / 100;
+            // }else{
+            //     discount = parseFloat($('.discount').val()) || 0;
+            // }
+
+            // // Calculate totalWith using the formula
+            // if(vat_percent==true || tax_percent==true){
+            //     var totalWith = (total * 100) / (100 - (vat + tax));
+            // }else{
+            //     var totalWith=total+tax+vat;
+            // }
+
+            // // console.log(totalWith,vat_percent,tax_percent,discount_percent,discount)
+            // let due = totalWith - (discount + payment);
+            // $('.due').val(due);
         }
 
     });

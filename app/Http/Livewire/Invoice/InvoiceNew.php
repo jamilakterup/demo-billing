@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Invoice;
 
+use App\Models\AgreementCounter;
 use Livewire\Component;
-use App\Models\Configuration;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\EstimateCounter;
@@ -485,6 +485,7 @@ class InvoiceNew extends Component
             DB::beginTransaction();
 
 
+            $agreementCounter = AgreementCounter::find(1);
             $invoiceCounter = InvoiceCounter::find(1);
             $estimateCounter = EstimateCounter::find(1);
             $cartTotal = \Cart::getTotal();
@@ -549,18 +550,20 @@ class InvoiceNew extends Component
             } else {
                 $cartDiscount = $this->discount;
             }
-
-
-            if ($this->vat_percent || $this->tax_percent) {
-                $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
-                $Totalpayment = $cartDiscount + $this->payment;
-                $this->due = $total_payable - $Totalpayment;
+            if ($this->vat_percent) {
+                $cartVat = ($cartTotal * $this->vat) / 100;
             } else {
-                $total_payable = ($cartTotal + $this->vat + $this->tax);
-                $Totalpayment = $cartDiscount + $this->payment;
-                $this->due = $total_payable - $Totalpayment;
+                $cartVat = $this->vat;
+            }
+            if ($this->tax_percent) {
+                $cartTax = ($cartTotal * $this->tax) / 100;
+            } else {
+                $cartTax = $this->tax;
             }
 
+            $total_payable = $cartTotal + $cartVat + $cartTax;
+            $Totalpayment = $cartDiscount + $this->payment;
+            $this->due = $total_payable - $Totalpayment;
 
             if (($cartDiscount + $this->payment) > $total_payable) {
                 $this->dispatchBrowserEvent('invoice-store', [
@@ -630,11 +633,14 @@ class InvoiceNew extends Component
                 $payment->save();
             }
 
-            $estimateCounter->number = $estimateCounter->number + 1;
-            $estimateCounter->update();
+            $agreementCounter->number = $agreementCounter->number + 1;
+            $agreementCounter->update();
 
             $invoiceCounter->number = $invoiceCounter->number + 1;
             $invoiceCounter->update();
+
+            $estimateCounter->number = $estimateCounter->number + 1;
+            $estimateCounter->update();
 
             \Cart::clear();
 
@@ -695,13 +701,19 @@ class InvoiceNew extends Component
         } else {
             $cartDiscount = $this->discount;
         }
-
-        if ($this->vat_percent || $this->tax_percent) {
-            $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
-            $Totalpayment = $cartDiscount + $this->payment;
-            $this->due = $total_payable - $Totalpayment;
+        if ($this->vat_percent) {
+            $cartVat = ($cartTotal * $this->vat) / 100;
         } else {
-            $this->due = ($cartTotal + $this->vat + $this->tax) - $cartDiscount;
+            $cartVat = $this->vat;
         }
+        if ($this->tax_percent) {
+            $cartTax = ($cartTotal * $this->tax) / 100;
+        } else {
+            $cartTax = $this->tax;
+        }
+
+        $total_payable = $cartTotal + $cartVat + $cartTax;
+        $Totalpayment = $cartDiscount + $this->payment;
+        $this->due = $total_payable - $Totalpayment;
     }
 }

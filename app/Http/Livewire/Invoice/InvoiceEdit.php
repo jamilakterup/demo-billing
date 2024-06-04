@@ -278,15 +278,15 @@ class InvoiceEdit extends Component
     }
 
 
-    public function grandTotal_Change()
-    {
+    // public function grandTotal_Change()
+    // {
 
-        $discountValue = (int)$this->discount;
-        //dd($discountValue);
-        $total = \Cart::getTotal();
+    //     $discountValue = (int)$this->discount;
+    //     //dd($discountValue);
+    //     $total = \Cart::getTotal();
 
-        $this->grandTotal = $discountValue + $total;
-    }
+    //     $this->grandTotal = $discountValue + $total;
+    // }
 
     public function itemAssign($product_id)
     {
@@ -395,6 +395,7 @@ class InvoiceEdit extends Component
         $validatedData = Validator::make($this->state, [
             'customer_id' => 'required',
             'invoice_type_id' => 'required',
+            'number' => 'required',
             'number' => 'required',
             'date' => 'required|date',
             'expected_payment_date' => 'required|date',
@@ -587,17 +588,20 @@ class InvoiceEdit extends Component
             } else {
                 $cartDiscount = $this->discount;
             }
-
-
-            if ($this->vat_percent || $this->tax_percent) {
-                $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
-                $Totalpayment = $cartDiscount + $this->payment;
-                $this->due = $total_payable - $Totalpayment;
+            if ($this->vat_percent) {
+                $cartVat = ($cartTotal * $this->vat) / 100;
             } else {
-                $total_payable = ($cartTotal + $this->vat + $this->tax);
-                $Totalpayment = $cartDiscount + $this->payment;
-                $this->due = $total_payable - $Totalpayment;
+                $cartVat = $this->vat;
             }
+            if ($this->tax_percent) {
+                $cartTax = ($cartTotal * $this->tax) / 100;
+            } else {
+                $cartTax = $this->tax;
+            }
+
+            $total_payable = $cartTotal + $cartVat + $cartTax;
+            $Totalpayment = $cartDiscount + $this->payment;
+            $this->due = $total_payable - $Totalpayment;
 
 
             if (($cartDiscount + $this->payment) > $total_payable) {
@@ -645,9 +649,10 @@ class InvoiceEdit extends Component
                 $newInvoice->status = 1;
             }
             $newInvoice->update();
-            InvoiceDetail::where('invoice_id', $this->invoice->id)->delete();
-            foreach ($cartContents as $cartContent) {
 
+            InvoiceDetail::where('invoice_id', $this->invoice->id)->delete();
+
+            foreach ($cartContents as $cartContent) {
                 $newInvoiceDetail = new InvoiceDetail;
                 $newInvoiceDetail->invoice_id = $newInvoice->id;
                 $newInvoiceDetail->product_id = $cartContent->attributes['product_id'];
@@ -732,13 +737,19 @@ class InvoiceEdit extends Component
         } else {
             $cartDiscount = $this->discount;
         }
-
-        if ($this->vat_percent || $this->tax_percent) {
-            $total_payable = ($cartTotal * 100) / (100 - ($this->vat + $this->tax));
-            $Totalpayment = $cartDiscount + $this->payment;
-            $this->due = $total_payable - $Totalpayment;
+        if ($this->vat_percent) {
+            $cartVat = ($cartTotal * $this->vat) / 100;
         } else {
-            $this->due = ($cartTotal + $this->vat + $this->tax) - $cartDiscount;
+            $cartVat = $this->vat;
         }
+        if ($this->tax_percent) {
+            $cartTax = ($cartTotal * $this->tax) / 100;
+        } else {
+            $cartTax = $this->tax;
+        }
+
+        $total_payable = $cartTotal + $cartVat + $cartTax;
+        $Totalpayment = $cartDiscount + $this->payment;
+        $this->due = $total_payable - $Totalpayment;
     }
 }
