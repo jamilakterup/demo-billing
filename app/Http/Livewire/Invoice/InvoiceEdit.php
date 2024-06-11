@@ -469,8 +469,10 @@ class InvoiceEdit extends Component
             $cartTax = $this->tax;
         }
 
+        $total_payable = $cartTotal + $cartVat + $cartTax;
+        $Totalpayment = $cartDiscount + $this->payment;
 
-        $mpdf = PDF::loadView($temp, compact('invoice_details', 'invoice', 'invoiceType', 'employee', 'customer', 'cartDiscount', 'cartVat', 'cartTax'), [], [
+        $mpdf = PDF::loadView($temp, compact('invoice_details', 'invoice', 'invoiceType', 'employee', 'customer', 'cartDiscount', 'cartVat', 'cartTax', 'cartTotal', 'total_payable', 'Totalpayment'), [], [
             'title'             => 'Invoice',
             'format'            => 'A4',
             'orientation'       => 'P',
@@ -637,11 +639,13 @@ class InvoiceEdit extends Component
 
             $subtotal = number_format($cartTotal, 2, ".", "");
             $discount = number_format($cartDiscount, 2, ".", "");
+            $vat = number_format($cartVat, 2, ".", "");
+            $tax = number_format($cartTax, 2, ".", "");
 
             $newInvoice->sub_total = $subtotal;
             $newInvoice->discount = $discount;
-            $newInvoice->vat = $this->vat;
-            $newInvoice->tax = $this->tax;
+            $newInvoice->vat = $vat;
+            $newInvoice->tax = $tax;
 
             $newInvoice->total = $this->due;
 

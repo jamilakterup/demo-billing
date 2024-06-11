@@ -424,10 +424,12 @@ class EstimateCreate extends Component
             $cartTax = $this->tax;
         }
 
-        $this->due  = $cartTotal + $cartVat + $cartTax;
+        $this->due  = ($cartTotal + $cartVat + $cartTax) - $cartDiscount;
 
         $subtotal = number_format($cartTotal, 2, ".", "");
         $discount = number_format($cartDiscount, 2, ".", "");
+        $vat = number_format($cartVat, 2, ".", "");
+        $tax = number_format($cartTax, 2, ".", "");
 
 
         $quotation_type_id = $this->state['quotation_type_id'];
@@ -473,8 +475,8 @@ class EstimateCreate extends Component
         $estimate->note = $note;
         $estimate->sub_total = $subtotal;
         $estimate->discount = $discount;
-        $estimate->tax = $this->tax;
-        $estimate->vat = $this->vat;
+        $estimate->tax = $tax;
+        $estimate->vat = $vat;
         $estimate->total = $this->due;
         $estimate->status = 'draft';
         $estimate->work_order = $work_order;

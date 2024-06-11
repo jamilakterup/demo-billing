@@ -143,23 +143,23 @@
         </tr>
         @if($estimate->discount>0)
         <tr>
-          <td colspan="6" style="text-align:center">Discount</td>
-          <td style="text-align:right">{{number_format((float)$estimate->total*$estimate->discount/100, 2, '.', ',')}}
+          <td colspan="5" style="text-align:center">Discount {{number_format((float)(($estimate->discount*100)/$estimate->sub_total), 2, '.', ',')}} %</td>
+          <td style="text-align:right">{{number_format((float)$estimate->discount, 2, '.', ',')}}
           </td>
         </tr>
         @endif
 
         @if($estimate->vat>0)
         <tr>
-          <td colspan="6" style="text-align:center">VAT {{$estimate->vat}} %</td>
-          <td style="text-align:right">{{number_format((float)$estimate->total*$estimate->vat/100, 2, '.', ',')}}</td>
+          <td colspan="5" style="text-align:center">VAT {{number_format((float)(($estimate->vat*100)/$estimate->sub_total), 2, '.', ',')}} %</td>
+          <td style="text-align:right">{{number_format((float)$estimate->vat, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         @if($estimate->tax>0)
         <tr>
-          <td colspan="6" style="text-align:center">TAX {{$estimate->tax}} %</td>
-          <td style="text-align:right">{{number_format((float)$estimate->total*$estimate->tax/100, 2, '.', ',')}}</td>
+          <td colspan="5" style="text-align:center">TAX {{number_format((float)(($estimate->tax*100)/$estimate->sub_total), 2, '.', ',')}} %</td>
+          <td style="text-align:right">{{number_format((float)$estimate->tax, 2, '.', ',')}}</td>
         </tr>
         @endif
 
