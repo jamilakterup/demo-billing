@@ -143,7 +143,7 @@
         </tr>
         @if($estimate->discount>0)
         <tr>
-          <td colspan="6" style="text-align:center">Discount {{number_format((float)(($estimate->discount*100)/$estimate->sub_total), 2, '.', ',')}} %</td>
+          <td colspan="6" style="text-align:center">Discount</td>
           <td style="text-align:right">{{number_format((float)$estimate->discount, 2, '.', ',')}}
           </td>
         </tr>

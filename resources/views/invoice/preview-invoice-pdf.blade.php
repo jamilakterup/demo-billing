@@ -135,8 +135,7 @@
         </tr>
         @if($cartDiscount>0)
         <tr>
-          <td colspan="6" style="text-align:center">Discount ({{number_format((float)(($cartDiscount*100)/$total), 2, '.', '')}} %)
-          </td>
+          <td colspan="6" style="text-align:center">Discount</td>
           <td style="text-align:right">{{number_format((float)$cartDiscount, 2, '.', ',')}}</td>
         </tr>
         @endif

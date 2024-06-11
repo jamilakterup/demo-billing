@@ -135,7 +135,7 @@
         </tr>
         @if($invoice->discount>0)
         <tr>
-          <td colspan="6" style="text-align:center">Discount {{number_format((float)(($invoice->discount*100)/$invoice->sub_total), 2, '.', ',')}} %</td>
+          <td colspan="6" style="text-align:center">Discount</td>
           <td style="text-align:right">{{number_format((float)$invoice->discount, 2, '.', ',')}}
           </td>
         </tr>
