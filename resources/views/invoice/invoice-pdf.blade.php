@@ -135,7 +135,7 @@
         </tr>
         @if($invoice->discount>0)
         <tr>
-          <td colspan="5" style="text-align:center">Discount {{number_format((float)(($invoice->discount*100)/$invoice->sub_total), 2, '.', ',')}} %</td>
+          <td colspan="6" style="text-align:center">Discount {{number_format((float)(($invoice->discount*100)/$invoice->sub_total), 2, '.', ',')}} %</td>
           <td style="text-align:right">{{number_format((float)$invoice->discount, 2, '.', ',')}}
           </td>
         </tr>
@@ -143,14 +143,14 @@
 
         @if($invoice->vat>0)
         <tr>
-          <td colspan="5" style="text-align:center">VAT {{number_format((float)(($invoice->vat*100)/$invoice->sub_total), 2, '.', ',')}} %</td>
+          <td colspan="6" style="text-align:center">VAT {{number_format((float)(($invoice->vat*100)/$invoice->sub_total), 2, '.', ',')}} %</td>
           <td style="text-align:right">{{number_format((float)$invoice->vat, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         @if($invoice->tax>0)
         <tr>
-          <td colspan="5" style="text-align:center">TAX {{number_format((float)(($invoice->tax*100)/$invoice->sub_total), 2, '.', ',')}} %</td>
+          <td colspan="6" style="text-align:center">TAX {{number_format((float)(($invoice->tax*100)/$invoice->sub_total), 2, '.', ',')}} %</td>
           <td style="text-align:right">{{number_format((float)$invoice->tax, 2, '.', ',')}}</td>
         </tr>
         @endif

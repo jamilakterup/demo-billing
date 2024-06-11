@@ -153,7 +153,7 @@
 
         @if($cartDiscount>0)
         <tr>
-          <td colspan="5" style="text-align:center">Discount ({{number_format((float)(($cartDiscount*100)/$total), 2, '.', '')}} %)
+          <td colspan="6" style="text-align:center">Discount ({{number_format((float)(($cartDiscount*100)/$total), 2, '.', '')}} %)
           </td>
           <td style="text-align:right">{{number_format((float)$cartDiscount, 2, '.', ',')}}</td>
         </tr>
@@ -161,7 +161,7 @@
 
         @if($cartVat>0)
         <tr>
-          <td colspan="5" style="text-align:center">VAT ({{number_format((float)(($cartVat*100)/$total), 2, '.', '')}} %)
+          <td colspan="6" style="text-align:center">VAT ({{number_format((float)(($cartVat*100)/$total), 2, '.', '')}} %)
           </td>
           <td style="text-align:right">{{number_format((float)$cartVat, 2, '.', ',')}}</td>
         </tr>
@@ -169,14 +169,14 @@
 
         @if($cartTax>0)
         <tr>
-          <td colspan="5" style="text-align:center">TAX ({{number_format((float)(($cartTax*100)/$total), 2, '.', '')}} %)
+          <td colspan="6" style="text-align:center">TAX ({{number_format((float)(($cartTax*100)/$total), 2, '.', '')}} %)
           </td>
           <td style="text-align:right">{{number_format((float)$cartTax, 2, '.', ',')}}</td>
         </tr>
         @endif
 
         <tr>
-          <td colspan="5" style="text-align:center">Total Payable on/before date:{{date_format($beforedate,"d")}}
+          <td colspan="6" style="text-align:center">Total Payable on/before date:{{date_format($beforedate,"d")}}
             {{date_format($beforedate,"F")}}, {{date_format($beforedate,"Y")}} </td>
           <td style="text-align:right">
             {{number_format((float)($total+$cartVat+$cartTax)-$cartDiscount, 2, '.',
@@ -194,7 +194,7 @@
         </tr>
 
         <!-- <tr>
-        <td colspan="5" style="text-align:center">Grand Total</td>
+        <td colspan="6" style="text-align:center">Grand Total</td>
         <td style="text-align:right">{{number_format((float)($total+$cartVat+$cartTax)-$cartDiscount, 2, '.', ',')}}</td>
       </tr> -->
 
