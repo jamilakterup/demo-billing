@@ -66,7 +66,7 @@
         </td>
         <td style="border:none;text-align:right; padding:0">
           @if($estimate->date_visibility)
-          <span>Date: {{date("d-m-Y", strtotime($estimate->date)) }}</span>
+          <span>Date: {{date("d-m-Y", strtotime($estimate->estimate_date)) }}</span>
           @else
           <span>Date:
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
