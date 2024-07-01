@@ -84,13 +84,13 @@
 
         <br>
         <p><strong>Subject:</strong> <span
-                style="border-bottom:1px solid; padding-bottom:4px; font-family:'siliguri','FreeSerif',sans-serif">{{ $invoice->subject }}</span>
+                style="border-bottom:1px solid; padding-bottom:4px; font-family:'siliguri','FreeSerif',sans-serif">{{ $invoice['subject'] }}</span>
         </p>
 
         <br>
         <p>
             Dear Sir,<br>
-            <span style="font-family: 'siliguri','FreeSerif',sans-serif">{{ $invoice->description }}</span>
+            <span style="font-family: 'siliguri','FreeSerif',sans-serif">{{ $invoice['description'] }}</span>
         </p>
         <br>
         <table id="details">
@@ -114,7 +114,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td style="font-family: 'siliguri','FreeSerif',sans-serif">{{ $invoice_detail->name }}</td>
                         <td style="text-align:center">
-                            @if ($invoice_detail->product->image)
+                            @if ($invoice_detail->product && $invoice_detail->product->image)
                                 <img height="60px" width="100px"
                                     src="{{ asset('storage/' . $invoice_detail->product->image) }}" alt="">
                             @endif
@@ -182,7 +182,7 @@
             <h4>N.B:
                 {{ $invoice['vat_text_visibility'] == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                      ' . $customer->company_name
+                                                                                                      ' . $customer->company_name
                     : $invoice['vat_text_visibility'] }}
             </h4>
         @endif

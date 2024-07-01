@@ -435,7 +435,7 @@ class InvoiceNew extends Component
             'format'            => 'A4',
             'orientation'       => 'P',
             'default_font_size' => '12',
-            'margin_top'        => 24,
+            'margin_top'        => 54,
             'margin_right'      => 12,
             'margin_bottom'     => 25,
             'margin_left'       => 27,
