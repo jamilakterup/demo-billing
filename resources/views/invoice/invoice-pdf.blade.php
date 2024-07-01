@@ -83,13 +83,13 @@
 
         <br>
         <p><strong>Subject:</strong> <span
-                style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{ $invoice->subject }}</span>
+                style="border-bottom:1px solid; padding-bottom:4px; font-family:'siliguri','FreeSerif',sans-serif">{{ $invoice->subject }}</span>
         </p>
 
         <br>
         <p>
             Dear Sir,<br>
-            <span style="font-family:siliguri">{{ $invoice->description }}</span>
+            <span style="font-family: 'siliguri','FreeSerif',sans-serif">{{ $invoice->description }}</span>
         </p>
         <br>
         <table id="details">
@@ -111,7 +111,8 @@
                 @foreach ($invoice_details as $invoice_detail)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td style="font-family:siliguri">{{ $invoice_detail->product->name }}</td>
+                        <td style="font-family: 'siliguri','FreeSerif',sans-serif">{{ $invoice_detail->product->name }}
+                        </td>
                         <td style="text-align:center">
                             @if ($invoice_detail->product->image)
                                 <img height="60px" width="100px"
@@ -180,7 +181,7 @@
             <h4>N.B:
                 {{ $invoice->vat_text_visibility == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                                      ' . $invoice->customer->company_name
+                                                                      ' . $invoice->customer->company_name
                     : $invoice->vat_text_visibility }}
             </h4>
         @endif

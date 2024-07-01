@@ -85,13 +85,13 @@
         <br>
 
         <p><strong>Subject:</strong> <span
-                style="border-bottom:1px solid; padding-bottom:4px; font-family:siliguri">{{ $estimate->subject }}</span>
+                style="border-bottom:1px solid; padding-bottom:4px; font-family:'siliguri','FreeSerif',sans-serif">{{ $estimate->subject }}</span>
         </p>
         <br>
 
         <p style="line-height:2">
             Dear Sir,<br>
-            <span style="font-family:siliguri">{{ $estimate->description }}</span>
+            <span style="font-family: 'siliguri','FreeSerif',sans-serif">{{ $estimate->description }}</span>
         </p>
         <br>
         <table id="details">
@@ -116,7 +116,8 @@
                     {{-- {{dd($estimate_details)}} --}}
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td style="font-family:siliguri">{{ $estimate_detail->product->name }}</td>
+                        <td style="font-family: 'siliguri','FreeSerif',sans-serif">
+                            {{ $estimate_detail->product->name }}</td>
                         <td style="text-align:center">
                             @if ($estimate_detail->product->image)
                                 <img height="60px" width="100px"
@@ -155,7 +156,8 @@
                 @if ($estimate->vat > 0)
                     <tr>
                         <td colspan="6" style="text-align:center">VAT
-                            {{ number_format((float) (($estimate->vat * 100) / $estimate->sub_total), 2, '.', ',') }} %</td>
+                            {{ number_format((float) (($estimate->vat * 100) / $estimate->sub_total), 2, '.', ',') }} %
+                        </td>
                         <td style="text-align:right">{{ number_format((float) $estimate->vat, 2, '.', ',') }}</td>
                     </tr>
                 @endif
@@ -163,7 +165,8 @@
                 @if ($estimate->tax > 0)
                     <tr>
                         <td colspan="6" style="text-align:center">TAX
-                            {{ number_format((float) (($estimate->tax * 100) / $estimate->sub_total), 2, '.', ',') }} %</td>
+                            {{ number_format((float) (($estimate->tax * 100) / $estimate->sub_total), 2, '.', ',') }} %
+                        </td>
                         <td style="text-align:right">{{ number_format((float) $estimate->tax, 2, '.', ',') }}</td>
                     </tr>
                 @endif
