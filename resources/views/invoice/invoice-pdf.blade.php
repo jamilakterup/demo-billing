@@ -111,8 +111,9 @@
                 @foreach ($invoice_details as $invoice_detail)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td style="font-family: 'FreeSerif',sans-serif">{{ $invoice_detail->product->name }}
-                        </td>
+                        {{-- <td style="font-family: 'FreeSerif',sans-serif">{{ $invoice_detail->product->name }}
+                        </td> --}}
+                        <td style="font-family: 'FreeSerif',sans-serif">আিম আগামী ১৫-০৬-২০২৪ তািরেখ আপনার মাল</td>
                         <td style="text-align:center">
                             @if ($invoice_detail->product->image)
                                 <img height="60px" width="100px"
@@ -181,7 +182,8 @@
             <h4>N.B:
                 {{ $invoice->vat_text_visibility == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                                                                                      ' . $invoice->customer->company_name
+                                                                                                                      ' .
+                        $invoice->customer->company_name
                     : $invoice->vat_text_visibility }}
             </h4>
         @endif
