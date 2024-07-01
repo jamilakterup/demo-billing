@@ -118,18 +118,20 @@
                         <td style="font-family: 'siliguri','FreeSerif',sans-serif">
                             {{ $invoice_detail->name }}<br>
                             <?php
-                            $date = date_create($invoice['recurring_start_date']);
-                            $interval = $invoice['recurring_interval'] . ' days';
-                            date_add($date, date_interval_create_from_date_string($interval));
-                            
-                            //$recurring_start_date=date_add($date,date_interval_create_from_date_string("40 days"));
-                            //$recurring_start_date=date("d-m-Y", strtotime($invoice->recurring_start_date));
-                            //$futureDate=date($recurring_start_date, strtotime('+1 year'));
-                            
-                            ?>
+                          if (isset($invoice['recurring_start_date'])) {
+                              $date = date_create($invoice['recurring_start_date']);
+                              $interval = $invoice['recurring_interval'] . ' days';
+                              date_add($date, date_interval_create_from_date_string($interval));
+                          ?>
                             From {{ date('d-m-Y', strtotime($invoice['recurring_start_date'])) }} to
                             {{ date_format($date, 'd-m-Y') }}
+                            <?php
+                          } else {
+                              echo "No recurring start date available.";
+                          }
+                          ?>
                         </td>
+
                         <td style="text-align:center">
                             @if ($invoice_detail->product && $invoice_detail->product->image)
                                 <img height="60px" width="100px"
@@ -221,7 +223,7 @@
             <h4>N.B:
                 {{ $invoice['vat_text_visibility'] == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                                                                      ' . $customer->company_name
+                                                                                      ' . $customer->company_name
                     : $invoice['vat_text_visibility'] }}
             </h4>
         @endif
