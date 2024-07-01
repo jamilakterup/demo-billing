@@ -111,7 +111,7 @@
                 @foreach ($invoice_details as $invoice_detail)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td style="font-family: 'siliguri','FreeSerif',sans-serif">{{ $invoice_detail->product->name }}
+                        <td style="font-family: 'FreeSerif',sans-serif">{{ $invoice_detail->product->name }}
                         </td>
                         <td style="text-align:center">
                             @if ($invoice_detail->product->image)
@@ -181,7 +181,7 @@
             <h4>N.B:
                 {{ $invoice->vat_text_visibility == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                                                                      ' . $invoice->customer->company_name
+                                                                                      ' . $invoice->customer->company_name
                     : $invoice->vat_text_visibility }}
             </h4>
         @endif
