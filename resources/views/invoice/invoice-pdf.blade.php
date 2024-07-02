@@ -61,7 +61,7 @@
             position: absolute;
             z-index: 1;
             height: 40px;
-            margin-left: -65px;
+            margin-left: -70px;
             margin-bottom: 20px;
         }
 
@@ -201,7 +201,7 @@
             <h4>N.B:
                 {{ $invoice->vat_text_visibility == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ' .
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ' .
                         $invoice->customer->company_name
                     : $invoice->vat_text_visibility }}
             </h4>
