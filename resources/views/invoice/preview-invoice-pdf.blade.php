@@ -61,7 +61,7 @@
             position: absolute;
             z-index: 1;
             height: 40px;
-            margin-left: -120px;
+            margin-left: -70px;
             margin-bottom: 20px;
         }
 
