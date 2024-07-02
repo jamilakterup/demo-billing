@@ -50,6 +50,26 @@
             margin: 0px;
             padding: 0px;
         }
+
+        .seal_signature {
+            position: relative;
+            width: 100px;
+            height: 80px;
+        }
+
+        .image1 {
+            position: absolute;
+            z-index: 1;
+            height: 40px;
+            margin-left: -120px;
+            margin-bottom: 20px;
+        }
+
+        .image2 {
+            position: absolute;
+            z-index: 0;
+            height: 80px;
+        }
     </style>
 </head>
 
@@ -181,7 +201,8 @@
             <h4>N.B:
                 {{ $invoice->vat_text_visibility == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                                                                                      ' . $invoice->customer->company_name
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ' .
+                        $invoice->customer->company_name
                     : $invoice->vat_text_visibility }}
             </h4>
         @endif
@@ -200,18 +221,25 @@
         <p>Sincerely,</p>
 
         <br>
-        <br>
 
         <table style="width:100%">
             @if (!is_null($employee->signature) && $invoice->auto_seal_signature)
                 <tr>
                     <td style="width:35%;text-align:left; border:none;margin:0;padding:0;vertical-align:bottom">
-                        <img src="{{ $employee->signature }}" height="40px">
-                    </td>
-                    <td rowspan="2" style="text-align:center; border:none; vertical-align:middle">
-                        <img src="bg/seal.png" height="80px">
+                        <div class="seal_signature">
+                            <img src="bg/seal.png" class="image2">
+                            <img src="{{ $employee->signature }}" class="image1">
+                        </div>
                     </td>
                 </tr>
+                {{-- <tr>
+                    <td style="width:35%;text-align:left; border:none;margin:0;padding:0;vertical-align:bottom">
+                        <img src="{{ $employee->signature }}" height="40px">
+                    </td>
+                    <td rowspan="2" style="text-align:left; border:none; vertical-align:middle">
+                        <img src="bg/seal.png" height="80px">
+                    </td>
+                </tr> --}}
             @endif
             <tr>
                 <td style="border:none; text-align:left;margin:0;padding:0;vertical-align:top">
