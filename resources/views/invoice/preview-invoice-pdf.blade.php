@@ -198,7 +198,7 @@
         echo '<p style="text-transform: capitalize; font-size:12px"><b>In Words: </b>' . $digit->format($total + $cartVat + $cartTax - $cartDiscount) . ' Taka Only.</p>';
         ?>
 
-        @if (isset($invoice['note']))
+        {{-- @if (isset($invoice['note']))
             <h4>N.B:
                 {{ $invoice['vat_text_visibility'] == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
@@ -206,10 +206,10 @@
                         $customer->company_name
                     : $invoice['vat_text_visibility'] }}
             </h4>
-        @endif
+        @endif --}}
 
-        @if ($invoice['vat_text_visibility'] != 'None')
-            <h4>N.B: {{ $invoice['vat_text_visibility'] }}</h4>
+        @if ($invoice['note'] != 'None')
+            <h4>N.B: {{ $invoice['note'] }}</h4>
         @endif
 
         <h4>Payment Method:</h4>

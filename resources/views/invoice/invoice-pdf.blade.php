@@ -197,22 +197,25 @@
         echo '<p style="text-transform: capitalize; font-size:12px"><b>In Words: </b>' . $digit->format($invoice->total) . ' Taka Only.</p>';
         ?>
 
-        @if ($invoice->vat_text_visibility != 'None')
+        {{-- @if ($invoice->vat_text_visibility != 'None')
             <h4>N.B:
                 {{ $invoice->vat_text_visibility == 'VAT & TAX. Paid by'
                     ? 'VAT & TAX. Paid by
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ' .
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ' .
                         $invoice->customer->company_name
                     : $invoice->vat_text_visibility }}
             </h4>
+        @endif --}}
+
+        @if ($invoice->note != 'None')
+            <h4>N.B: {{ $invoice->note }}</h4>
         @endif
 
         <h4>Payment Method:</h4>
         <ul>
-            <li>Payment should be made by an account payee cheque in favor of "rajIT Solutions Ltd." A/C No.
-                0044-0210006856
-                Mutual Trust Bank Ltd, Rajshahi Branch. </li>
-            <li>bkash at the number: 01762623195 (Merchant Account)/ 01755575801 (personal).</li>
+            <li>Payment should be made by an account payee cheque in favor of "North Bengal Engineering" A/C No.
+                20502790100166302 Rut=125811637 Islami Bank Ltd. </li>
+            <li>bkash at the number: 01772176237 (personal).</li>
         </ul>
 
 

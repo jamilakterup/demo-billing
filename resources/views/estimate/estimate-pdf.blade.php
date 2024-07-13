@@ -205,7 +205,7 @@
         ?>
 
         @if (isset($estimate->vat_text_visibility))
-            <h4>N.B: {{ $estimate->vat_text_visibility }}</h4>
+            <h4>N.B: {{ $estimate->note }}</h4>
         @endif
         <br>
         <p>Thanking you.</p>
