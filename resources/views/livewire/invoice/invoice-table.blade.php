@@ -66,55 +66,55 @@
                                     </thead>
                                     <tbody>
 
-                                        @foreach ($invoices as $index=>$invoice)
-                                        <tr>
-                                            <td>{{$invoices->firstItem()+$index}}</td>
-                                            <td>INVOICE-{{$invoice->number}}</td>
-                                            {{-- <td>{{$invoice->invoice_type->invoice_type_name}}</td> --}}
-                                            <td>{{$invoice->date}}</td>
-                                            <td>{{$invoice->is_recurring?'Yes':'No'}}</td>
-                                            <td>{{$invoice->recurring_interval}}</td>
-                                            <td title="{{$invoice->customer->name}}">
-                                                {{\Str::limit($invoice->customer->name, 10) }}</td>
-                                            <td>
-                                                @if($invoice->status)
-                                                <span class="badge bg-success">PAID</span>
-                                                @else
-                                                <span class="badge bg-danger">UNPAID</span>
-                                                @endif
-                                            </td>
-                                            <td>{{$invoice->total}}</td>
-                                            {{-- <td>{{$invoice->discount}}</td> --}}
-                                            <td>{{\App\Models\Invoice::get_due($invoice->id)}}</td>
+                                        @foreach ($invoices as $index => $invoice)
+                                            <tr>
+                                                <td>{{ $invoices->firstItem() + $index }}</td>
+                                                <td>INVOICE-{{ $invoice->number }}</td>
+                                                {{-- <td>{{$invoice->invoice_type->invoice_type_name}}</td> --}}
+                                                <td>{{ $invoice->date }}</td>
+                                                <td>{{ $invoice->is_recurring ? 'Yes' : 'No' }}</td>
+                                                <td>{{ $invoice->recurring_interval }}</td>
+                                                <td title="{{ $invoice->customer->name }}">
+                                                    {{ \Str::limit($invoice->customer->name, 10) }}</td>
+                                                <td>
+                                                    @if ($invoice->status)
+                                                        <span class="badge bg-success">PAID</span>
+                                                    @else
+                                                        <span class="badge bg-danger">UNPAID</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $invoice->total }}</td>
+                                                <td>{{ \App\Models\Invoice::get_due($invoice->id) }}</td>
 
 
-                                            <td>
-                                                <div class="d-flex justify-content-center align-items-center">
-                                                    <a class="btn btn-outline-primary btn-sm"
-                                                        wire:click.prevent="print({{$invoice->id}})"
-                                                        data="{{$invoice->file}}"><i class="fa-solid fa-print"></i></a>
+                                                <td>
+                                                    <div class="d-flex justify-content-center align-items-center">
+                                                        <a class="btn btn-outline-primary btn-sm mx-1"
+                                                            wire:click.prevent="print({{ $invoice->id }})"
+                                                            data="{{ $invoice->file }}"><i
+                                                                class="fa-solid fa-print"></i></a>
 
-                                                    <a class="btn btn-outline-info btn-sm mx-1"
-                                                        href="{{route('invoice.show',$invoice->id)}}"><i
-                                                            class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-outline-info btn-sm"
+                                                            href="{{ route('invoice.show', $invoice->id) }}"><i
+                                                                class="fas fa-eye"></i></a>
 
-                                                    <a class="btn btn-outline-primary btn-sm fas fa-edit mx-1"
-                                                        onclick='_openModal("Edit invoice", "invoice.invoice-edit",{{ json_encode(["id" => $invoice->id]) }},"xl")'></a>
+                                                        <a class="btn btn-outline-primary btn-sm fas fa-edit mx-1"
+                                                            onclick='_openModal("Edit invoice", "invoice.invoice-edit",{{ json_encode(['id' => $invoice->id]) }},"xl")'></a>
 
 
-                                                    <a class="btn btn-outline-danger btn-sm"
-                                                        wire:click.prevent="delete({{$invoice->id}})"><i
-                                                            class="fas fa-trash"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                        <a class="btn btn-outline-danger btn-sm"
+                                                            wire:click.prevent="delete({{ $invoice->id }})"><i
+                                                                class="fas fa-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                         {{-- {{route('category.delete',$category->id)}} --}}
 
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="mt-2">{{$invoices->links('livewire.custom-pagination')}}</div>
+                            <div class="mt-2">{{ $invoices->links('livewire.custom-pagination') }}</div>
                         </div>
                     </div>
                 </div>

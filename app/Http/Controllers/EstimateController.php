@@ -193,7 +193,7 @@ class EstimateController extends Controller
      * @param  \App\Models\Estimate  $estimate
      * @return \Illuminate\Http\Response
      */
-    public function show(Estimate $estimate)
+    public function download(Estimate $estimate)
     {
         $estimate_details = EstimateDetail::where('estimate_id', $estimate->id)->get();
         $is_converted = Invoice::where('estimate_id', $estimate->id)->count();
@@ -221,13 +221,55 @@ class EstimateController extends Controller
             'margin_top'        => 55,
             'margin_right'      => 12,
             'margin_bottom'     => 25,
-            'margin_left'       => 16,
+            'margin_left'       => 15,
             'margin_header'     => 0,
             'margin_footer'     => 0,
             'show_watermark'           => false,
             'display_mode'             => 'fullpage',
             'show_watermark_image'     => true,
             'watermark_image_alpha'    => 1,
+            'watermark_image_path'       => asset('bg/pad.jpg'),
+        ])->save($filename);
+
+        return view('estimate.estimate-show', compact('estimate', 'send_mail_count', 'is_converted'));
+    }
+
+
+    public function show(Estimate $estimate)
+    {
+        $estimate_details = EstimateDetail::where('estimate_id', $estimate->id)->get();
+        $is_converted = Invoice::where('estimate_id', $estimate->id)->count();
+        $send_mail_count = SendMail::where('estimate_id', $estimate->id)->count();
+        $employee = Employee::find($estimate->employee_id);
+
+
+        $file_path = public_path() . '/pdf/' . $estimate->file;
+        if (file_exists($file_path) && !is_null($estimate->file)) {
+            unlink($file_path);
+        }
+
+        $upload_dir = public_path();
+        $newFileName = 'quotation_' . time() . '_' . $estimate->number . '.pdf';
+        $filename = $upload_dir . '/pdf/' . $newFileName . '';
+        $estimate->file = $newFileName;
+        $estimate->update();
+
+
+        $mpdf = PDF::loadView('estimate.estimate-pdf', compact('estimate_details', 'estimate', 'employee'), [], [
+            'title'             => 'estimate',
+            'format'            => 'A4',
+            'orientation'       => 'P',
+            'default_font_size' => '12',
+            'margin_top'        => 15,
+            'margin_right'      => 12,
+            'margin_bottom'     => 25,
+            'margin_left'       => 15,
+            'margin_header'     => 0,
+            'margin_footer'     => 0,
+            'show_watermark'           => false,
+            'display_mode'             => 'fullpage',
+            'show_watermark_image'     => true,
+            'watermark_image_alpha'    => 0,
             'watermark_image_path'       => asset('bg/pad.jpg'),
         ])->save($filename);
 

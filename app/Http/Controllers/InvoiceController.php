@@ -100,16 +100,16 @@ class InvoiceController extends Controller
             'format'            => 'A4',
             'orientation'       => 'P',
             'default_font_size' => '12',
-            'margin_top'        => 54,
+            'margin_top'        => 15,
             'margin_right'      => 12,
             'margin_bottom'     => 25,
-            'margin_left'       => 16,
+            'margin_left'       => 15,
             'margin_header'     => 0,
             'margin_footer'     => 0,
             'show_watermark'           => false,
             'display_mode'               => 'fullpage',
             'show_watermark_image'     => true,
-            'watermark_image_alpha'    => 1,
+            'watermark_image_alpha'    => 0,
             'watermark_image_path'       => asset('bg/pad.jpg'),
         ])->save($filename);
 
@@ -136,7 +136,23 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $invoice = Invoice::findOrFail($id);
+        if ($invoice->cancellation == 0) {
+            $invoice->cancellation = 1;
+            $invoice->status = 2;
+            $invoice->update();
+
+            Alert::success('Success', 'invoice has been canceled successfully!');
+            return redirect()->route('invoice.index');
+        }
+        if ($invoice->cancellation == 1) {
+            $invoice->cancellation = 0;
+            $invoice->status = 0;
+            $invoice->update();
+
+            Alert::success('Success', 'invoice has been accepted successfully!');
+            return redirect()->route('invoice.cancel');
+        }
     }
 
     /**
@@ -157,12 +173,15 @@ class InvoiceController extends Controller
         $customer = Customer::find($invoice->customer_id);
         $invoiceType = InvoiceType::find($invoice->invoice_type_id);
         $organization = Organization::find(1);
+        $invoice_details = InvoiceDetail::where('invoice_id', $id)->get();
 
         $data = [
             'title' => $invoice->subject,
             'body' => $invoice->description,
             'invoice' => $invoice,
-            'file_name' => $invoice->file
+            'file_name' => $invoice->file,
+            'total' => $invoice->total,
+            'unit' => $invoice->recurring_interval,
         ];
 
 
@@ -173,6 +192,8 @@ class InvoiceController extends Controller
         $sent_mail->invoice_id = $invoice->id;
         $sent_mail->title = $data['title'];
         $sent_mail->body = $data['body'];
+        // $sent_mail->total = $data['total'];  total field need to add in database
+        // $sent_mail->unit = $data['unit'];    body field need to add in database
         $sent_mail->save();
 
         Alert::success('Success', 'Invoice has been mailed successfully.');

@@ -10,6 +10,7 @@ use App\Models\Product as AppProduct;
 use App\Models\ProductType;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Mediconesystems\LivewireDatatables\Column;
@@ -77,8 +78,9 @@ class Product extends Component
 
         if (isset($this->state['image']) && is_object($this->state['image'])) {
             $file_path = public_path() . '/storage/' . $this->product['image'];
-            if (file_exists($file_path)) {
-                unlink($file_path);
+
+            if ($file_path && asset(Storage::exists($file_path))) {
+                asset(Storage::delete($file_path));
             }
 
             $file = $this->state['image'];

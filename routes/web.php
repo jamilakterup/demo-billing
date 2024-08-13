@@ -98,6 +98,7 @@ Route::prefix('/')->middleware('auth')->group(function () {
     Route::resource('customer', CustomerController::class);
     Route::resource('invoice', InvoiceController::class);
     Route::resource('estimate', EstimateController::class);
+    Route::get('estimate/download/{id}', [EstimateController::class, 'download'])->name('estimate.download');
     Route::resource('agreement', AgreementController::class);
 
     Route::get('estimate/work-order/{id}', [EstimateController::class, 'work_order_show'])->name('work_order_show');

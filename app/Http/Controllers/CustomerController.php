@@ -63,11 +63,11 @@ class CustomerController extends Controller
             'name' => 'required|max:255',
             'display_name' => 'required|max:255',
             'phone' => 'required|numeric',
-            'email' => 'required|email|max:255',
+            // 'email' => 'required|email|max:255',
             'company_name' => 'required|max:255',
             'company_email' => 'nullable|email|max:255',
             'company_phone' => 'nullable|numeric',
-            'company_address' => 'nullable|max:255',
+            // 'company_address' => 'nullable|max:255',
             // 'company_website' => 'required|max:255',
             'company_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
         ]);

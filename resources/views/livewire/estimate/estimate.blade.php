@@ -16,13 +16,13 @@
     </table>
 
     {{-- Subcopy --}}
-    {{-- @slot('subcopy')
+    @slot('subcopy')
         @component('mail::subcopy')
             <p><b>Dear Sir,</b><br>
-                Greetings! Please find the bill attached herewith the email.
+                Greetings! Please find the quotation attached herewith the email.
                 Please feel free to contact us for any query at your convenience.
                 We are open from 9 AM to 5 PM, Saturday-Thursday except public holidays.
-                We can be reached over phone at +8801762623193 or email - info@rajit.net or WhatsApp +8801888099690
+                We can be reached over phone at +8801772176237.
             </p>
 
             <br>
@@ -30,33 +30,20 @@
 
             <p>
                 Kind regards-<br>
-                rajIT Team
+                North Bengal Engineering
             </p>
 
             <br>
             <br>
             <p>NB: This is a computer-generated Bill- no signature required.</p>
         @endcomponent
-    @endslot --}}
-
-
-    @slot('subcopy')
-        @component('mail::subcopy')
-            <p><b>Dear Sir,</b><br>Greetings! Please find the bill, which goes for <b> {{ $data['total'] }}</b> and has a <b>
-                    {{ $data['unit'] }} </b> -day term. The bill information is linked to this email. Please don't hesitate to get
-                in touch with us with any questions at anytime. We are open from 9 AM to 5 PM, Saturday-Thursday except for public
-                holidays. We can be reached over the phone at +8801762623193 or by email at info@rajit.net or WhatsApp at
-                +8801762623193<br>Kind regards,<br>rajIT Team<br><br>NB: This is a computer-generated Bill- no signature required.
-            </p>
-        @endcomponent
     @endslot
 
-
-
+    {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')
             <!-- Thanks,<br>
-                                    {{ $organization->name }} -->
+                                                                        {{ $organization->name }} -->
             &copy; {{ date('Y') }} {{ $organization->name }}
             @lang('All rights reserved.')
         @endcomponent
