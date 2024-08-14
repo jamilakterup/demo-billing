@@ -468,7 +468,7 @@ class InvoiceTable extends Component
         }
 
         $upload_dir = public_path();
-        $newFileName = 'invoice_' . time() . '_' . $invoice->number . '.pdf';
+        $newFileName =  $invoice->number . '.pdf';
         $filename = $upload_dir . '/pdf/' . $newFileName . '';
         $invoice->file = $newFileName;
         $invoice->update();
@@ -492,8 +492,8 @@ class InvoiceTable extends Component
             'margin_left'       => 16,
             'margin_header'     => 0,
             'margin_footer'     => 0,
-            'show_watermark'           => false,
-            'display_mode'               => 'fullpage',
+            'show_watermark'    => false,
+            'display_mode'      => 'fullpage',
             'show_watermark_image'     => true,
             'watermark_image_alpha'    => 1,
             'watermark_image_path'       => asset('bg/pad.jpg'),

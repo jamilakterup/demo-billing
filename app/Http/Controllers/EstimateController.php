@@ -193,6 +193,8 @@ class EstimateController extends Controller
      * @param  \App\Models\Estimate  $estimate
      * @return \Illuminate\Http\Response
      */
+
+
     public function download(Estimate $estimate)
     {
         $estimate_details = EstimateDetail::where('estimate_id', $estimate->id)->get();
@@ -207,7 +209,7 @@ class EstimateController extends Controller
         }
 
         $upload_dir = public_path();
-        $newFileName = 'quotation_' . time() . '_' . $estimate->number . '.pdf';
+        $newFileName = $estimate->number . '.pdf';
         $filename = $upload_dir . '/pdf/' . $newFileName . '';
         $estimate->file = $newFileName;
         $estimate->update();
@@ -223,8 +225,8 @@ class EstimateController extends Controller
             'margin_bottom'     => 25,
             'margin_left'       => 15,
             'margin_header'     => 0,
-            'margin_footer'     => 0,
-            'show_watermark'           => false,
+            'margin_footer'     => 1,
+            'show_watermark'           => true,
             'display_mode'             => 'fullpage',
             'show_watermark_image'     => true,
             'watermark_image_alpha'    => 1,
@@ -237,6 +239,7 @@ class EstimateController extends Controller
 
     public function show(Estimate $estimate)
     {
+        // dd(Auth::user());
         $estimate_details = EstimateDetail::where('estimate_id', $estimate->id)->get();
         $is_converted = Invoice::where('estimate_id', $estimate->id)->count();
         $send_mail_count = SendMail::where('estimate_id', $estimate->id)->count();
@@ -249,7 +252,7 @@ class EstimateController extends Controller
         }
 
         $upload_dir = public_path();
-        $newFileName = 'quotation_' . time() . '_' . $estimate->number . '.pdf';
+        $newFileName = $estimate->number . '.pdf';
         $filename = $upload_dir . '/pdf/' . $newFileName . '';
         $estimate->file = $newFileName;
         $estimate->update();
@@ -265,8 +268,8 @@ class EstimateController extends Controller
             'margin_bottom'     => 25,
             'margin_left'       => 15,
             'margin_header'     => 0,
-            'margin_footer'     => 0,
-            'show_watermark'           => false,
+            'margin_footer'     => 1,
+            'show_watermark'           => true,
             'display_mode'             => 'fullpage',
             'show_watermark_image'     => true,
             'watermark_image_alpha'    => 0,

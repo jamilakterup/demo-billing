@@ -128,6 +128,7 @@
             </thead>
             <tbody>
                 @php
+                    $grandTotal = 0;
                     $total = 0;
                     $vat = 0;
                     $tax = 0;
@@ -193,8 +194,11 @@
 
                 <tr>
                     <td colspan="6" style="text-align:center">Grand Total</td>
-                    <td style="text-align:right">{{ number_format((float) $grandTotal, 2, '.', ',') }}</td>
+                    <td style="text-align:right">
+                        {{ number_format((float) ($grandTotal ?? 0), 2, '.', ',') }}
+                    </td>
                 </tr>
+
             </tfoot>
         </table>
         <br>
@@ -216,7 +220,7 @@
 
 
         <table style="width:100%">
-            @if (!is_null($employee->signature) && $estimate->auto_seal_signature)
+            @if ($employee && !is_null($employee->signature) && $estimate->auto_seal_signature)
                 <tr>
                     <td style="width:35%;text-align:left; border:none;margin:0;padding:0;vertical-align:bottom">
                         <div class="seal_signature">
@@ -225,22 +229,15 @@
                         </div>
                     </td>
                 </tr>
-                {{-- <tr>
-                    <td style="width:35%;text-align:left; border:none;margin:0;padding:0;vertical-align:bottom">
-                        <img src="{{ $employee->signature }}" height="40px">
-                    </td>
-                    <td rowspan="2" style="text-align:center; border:none; vertical-align:middle">
-                        <img src="/bg/seal.png" height="90px">
-                    </td>
-                </tr> --}}
             @endif
             <tr>
                 <td style="border:none; text-align:left;margin:0;padding:0;vertical-align:top">
-                    <p><b>{{ $employee->name }}</b></p>
-                    <p>{{ $employee->designation->name }}</p>
+                    <p><b>{{ $employee ? $employee->name : 'N/A' }}</b></p>
+                    <p>{{ $employee ? $employee->designation->name : 'N/A' }}</p>
                 </td>
             </tr>
         </table>
+
 
 
     </div>

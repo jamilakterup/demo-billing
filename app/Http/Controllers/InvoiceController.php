@@ -77,7 +77,7 @@ class InvoiceController extends Controller
         }
 
         $upload_dir = public_path();
-        $newFileName = 'invoice_' . time() . '_' . $invoice->number . '.pdf';
+        $newFileName = $invoice->number . '.pdf';
         $filename = $upload_dir . '/pdf/' . $newFileName . '';
         $invoice->file = $newFileName;
         $invoice->update();
