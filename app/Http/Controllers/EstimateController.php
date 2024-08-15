@@ -239,7 +239,6 @@ class EstimateController extends Controller
 
     public function show(Estimate $estimate)
     {
-        // dd(Auth::user());
         $estimate_details = EstimateDetail::where('estimate_id', $estimate->id)->get();
         $is_converted = Invoice::where('estimate_id', $estimate->id)->count();
         $send_mail_count = SendMail::where('estimate_id', $estimate->id)->count();

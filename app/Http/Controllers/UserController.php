@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -20,8 +21,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users=User::all();
-        return view('user.user-index',compact('users'));
+        $users = User::all();
+        return view('user.user-index', compact('users'));
     }
 
     /**
@@ -31,8 +32,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles=Role::all()->pluck('name','id')->toArray();
-        return view('user.user-create',compact('roles'));
+        $roles = Role::all()->pluck('name', 'id')->toArray();
+        return view('user.user-create', compact('roles'));
     }
 
     /**
@@ -43,42 +44,52 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
-        $rules=array(
-            'name'=>'required|max:255',
-            'email'=>'required|email|max:255|unique:users,email',
-            'mobile'=>'required|numeric|min:11',
-            'password'=>'required|min:8|max:255',
-            'confirmed_password'=>'required_with:password|same:password|min:8',
-            'photo'=>'sometimes|image|mimes:jpeg,png,jpg|max:1024'
+        $rules = array(
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'mobile' => 'required|numeric|min:11',
+            'password' => 'required|min:8|max:255',
+            'confirmed_password' => 'required_with:password|same:password|min:8',
+            'photo' => 'sometimes|image|mimes:jpeg,png,jpg|max:1024',
+            'signature' => 'sometimes|image|mimes:png|max:1024'
         );
 
-        $this->validate($request,$rules);
-        $user=new User;
-        $user->name=$request->name;
-        $user->email=$request->email;
-        $user->mobile=$request->mobile;
-        $user->password=bcrypt($request->password);
+        $this->validate($request, $rules);
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->mobile = $request->mobile;
+        $user->password = bcrypt($request->password);
         $user->save();
 
-        if($request->hasFile('photo')){
-            $image=$request->file('photo');
-            $ext=$image->getClientOriginalExtension();
-            $file_name='profile_pic_'.$user->id.'.'.$ext;
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $ext = $image->getClientOriginalExtension();
+            $file_name = 'profile_pic_' . $user->id . '.' . $ext;
 
-            $des=public_path().'/photo';
-            $image->move($des,$file_name);
-            $user->profile_photo_path=$file_name;
+            $des = public_path() . '/photo';
+            $image->move($des, $file_name);
+            $user->profile_photo_path = $file_name;
             $user->save();
         }
 
-        if(count($request->roles)>0){
+        if ($request->hasFile('signature')) {
+            $signature = $request->file('signature');
+            $ext = $signature->getClientOriginalExtension();
+            $file_name = 'signature_' . $user->id . '.' . $ext;
+
+            $des = public_path() . '/signature';
+            $signature->move($des, $file_name);
+            $user->signature = $file_name;
+            $user->save();
+        }
+
+        if (count($request->roles) > 0) {
             $user->assignRole($request->roles);
         }
 
         Alert::success('Success', 'User has been saved successfully.');
         return redirect()->route('user.index');
-
     }
 
     /**
@@ -100,9 +111,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user=User::find($id);
-        $roles=Role::all()->pluck('name','id')->toArray();
-        return view('user.user-edit',compact('user','roles'));
+        $user = User::find($id);
+        $roles = Role::all()->pluck('name', 'id')->toArray();
+        return view('user.user-edit', compact('user', 'roles'));
     }
 
     /**
@@ -114,13 +125,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules=array(
-            'name'=>'required|max:255',
-            'email'=>'required|email|max:255|unique:users,email,'.$id.'',
-            'mobile'=>'required|numeric|min:11',
-            'password'=>'nullable|min:8|max:255',
-            'confirmed_password'=>'nullable|required_with:password|same:password|min:8',
-            'photo'=>'sometimes|image|mimes:jpeg,png,jpg|max:1024'
+        $rules = array(
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id . '',
+            'mobile' => 'required|numeric|min:11',
+            'password' => 'nullable|min:8|max:255',
+            'confirmed_password' => 'nullable|required_with:password|same:password|min:8',
+            'photo' => 'sometimes|image|mimes:jpeg,png,jpg|max:1024',
+            'signature' => 'sometimes|image|mimes:png|max:1024',
         );
 
 
@@ -128,30 +140,41 @@ class UserController extends Controller
 
 
 
-        $this->validate($request,$rules);
+        $this->validate($request, $rules);
 
-        $user=User::find($id);
-        $user->name=$request->name;
-        $user->email=$request->email;
-        $user->mobile=$request->mobile;
-        if(isset($request->password)){
-            $user->password=bcrypt($request->password);
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->mobile = $request->mobile;
+        if (isset($request->password)) {
+            $user->password = bcrypt($request->password);
         }
         $user->update();
 
-        if($request->hasFile('photo')){
-            $image=$request->file('photo');
-            $ext=$image->getClientOriginalExtension();
-            $file_name='profile_pic_'.$user->id.'.'.$ext;
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $ext = $image->getClientOriginalExtension();
+            $file_name = 'profile_pic_' . $user->id . '.' . $ext;
 
-            $des=public_path().'/photo';
-            $image->move($des,$file_name);
-            $user->profile_photo_path=$file_name;
+            $des = public_path() . '/photo';
+            $image->move($des, $file_name);
+            $user->profile_photo_path = $file_name;
+            $user->update();
+        }
+
+        if ($request->hasFile('signature')) {
+            $signature = $request->file('signature');
+            $ext = $signature->getClientOriginalExtension();
+            $file_name = 'signature_' . $user->id . '.' . $ext;
+
+            $des = public_path() . '/signature';
+            $signature->move($des, $file_name);
+            $user->signature = $file_name;
             $user->update();
         }
 
         $user->roles()->detach();
-        if($request->roles){
+        if ($request->roles) {
             $user->assignRole($request->roles);
         }
 

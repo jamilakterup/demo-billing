@@ -34,6 +34,12 @@ class CollectionShow extends Component
         $this->dispatchBrowserEvent('is_sold_confirm', ['soldLead' => $leadCollection]);
     }
 
+    // convert to customer
+    public function convertToCustomer($leadCollection)
+    {
+        $this->emitTo('lead-collection.convert-to-customer', 'refreshComponent');
+    }
+
     public function soldConfirmed()
     {
         $soldleadInfo = LeadCollection::findOrFail($this->leadCollection['id']);

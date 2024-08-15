@@ -1,23 +1,24 @@
 <x-livewiremodal-modal>
     <div class="mb-2">
         @if ($routeName == 'sold_lead')
-        <button wire:click='convertToInactive({{$leadCollection}})' class="btn btn-sm btn-danger"><i
-                class="fas fa-exchange-alt"></i> Convert To Inactive Lead</button>
-
+            <button wire:click='convertToInactive({{ $leadCollection }})' class="btn btn-sm btn-danger"><i
+                    class="fas fa-exchange-alt"></i> Convert To Inactive Lead</button>
         @elseif($routeName == 'inactive_lead')
-
-        <button wire:click='convertToSold({{$leadCollection}})' class="btn btn-sm btn-primary"><i
-                class="fas fa-exchange-alt"></i>
-            Convert To Sold Lead</button>
-
+            <button wire:click='convertToSold({{ $leadCollection }})' class="btn btn-sm btn-primary"><i
+                    class="fas fa-exchange-alt"></i>
+                Convert To Sold Lead</button>
         @else
-
-        <button wire:click='convertToSold({{$leadCollection}})' class="btn btn-sm btn-primary"><i
-                class="fas fa-exchange-alt"></i>
-            Convert To Sold Lead</button>
-        <button wire:click='convertToInactive({{$leadCollection}})' class="btn btn-sm btn-danger"><i
-                class="fas fa-exchange-alt"></i> Convert To Inactive Lead</button>
+            <button wire:click='convertToSold({{ $leadCollection }})' class="btn btn-sm btn-primary"><i
+                    class="fas fa-exchange-alt"></i>
+                Convert To Sold Lead</button>
+            <button wire:click='convertToInactive({{ $leadCollection }})' class="btn btn-sm btn-danger"><i
+                    class="fas fa-exchange-alt"></i> Convert To Inactive Lead</button>
         @endif
+
+        <button
+            onclick='_openModal("Convert To Customer", "lead-collection.convert-to-customer",{{ json_encode(['leadCollection' => "$leadCollection->id"]) }},"lg")'
+            class="btn btn-sm btn-primary"><i class="fas fa-exchange-alt"></i>
+            Convert To Customer</button>
 
     </div>
     <table class="table table-bordered">
@@ -33,17 +34,17 @@
         </thead>
         <tbody>
             @foreach ($leadStatusInfos as $leadStatusInfo)
-            <tr>
-                <td>{{$leadStatusInfo['followup']}}</td>
-                <td>{{$leadStatusInfo['consultant']}}</td>
-                <td>{{$leadStatusInfo['status']}}</td>
-                <td>{{$leadStatusInfo['comment']}}</td>
-                <td>{{date('d-m-Y',strtotime($leadStatusInfo['created_at']))}}</td>
-                <td>{{date('h:i A',strtotime($leadStatusInfo['created_at']))}}</td>
+                <tr>
+                    <td>{{ $leadStatusInfo['followup'] }}</td>
+                    <td>{{ $leadStatusInfo['consultant'] }}</td>
+                    <td>{{ $leadStatusInfo['status'] }}</td>
+                    <td>{{ $leadStatusInfo['comment'] }}</td>
+                    <td>{{ date('d-m-Y', strtotime($leadStatusInfo['created_at'])) }}</td>
+                    <td>{{ date('h:i A', strtotime($leadStatusInfo['created_at'])) }}</td>
 
-                </td>
+                    </td>
 
-            </tr>
+                </tr>
             @endforeach
         </tbody>
     </table>

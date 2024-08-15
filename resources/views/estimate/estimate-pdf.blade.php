@@ -225,15 +225,15 @@
                     <td style="width:35%;text-align:left; border:none;margin:0;padding:0;vertical-align:bottom">
                         <div class="seal_signature">
                             <img src="bg/seal.png" class="image2">
-                            <img src="{{ $employee->signature }}" class="image1">
+                            <img src="{{ asset('signature/' . Auth::user()->signature) }}" class="image1">
                         </div>
                     </td>
                 </tr>
             @endif
             <tr>
                 <td style="border:none; text-align:left;margin:0;padding:0;vertical-align:top">
-                    <p><b>{{ $employee ? $employee->name : 'N/A' }}</b></p>
-                    <p>{{ $employee ? $employee->designation->name : 'N/A' }}</p>
+                    <p><b>{{ Auth::user() ? Auth::user()->name : 'N/A' }}</b></p>
+                    {{-- <p>{{ Auth::user() ? $employee->designation->name : 'N/A' }}</p> --}}
                 </td>
             </tr>
         </table>
